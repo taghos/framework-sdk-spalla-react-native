@@ -8,10 +8,10 @@ import com.facebook.react.uimanager.ViewManager
 
 class SpallaPlayerPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return emptyList()
+    return listOf(SpallaPlayerModule(reactContext))
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(SpallaPlayerViewManager())
+    return listOf(RNSpallaPlayerManager())
   }
 }

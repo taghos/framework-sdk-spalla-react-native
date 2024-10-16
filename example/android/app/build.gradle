@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "spallaplayerexample"
+    namespace "spallaplayer.example"
     defaultConfig {
-        applicationId "spallaplayerexample"
+        applicationId "spallaplayer.example"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package spallaplayerexample
+package spallaplayer.example
 
 import android.app.Application
 import com.facebook.react.PackageList

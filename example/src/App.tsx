@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, SafeAreaView, StyleSheet } from 'react-native';
 import SpallaPlayer, { initialize } from 'react-native-spalla-player';
 
-initialize('your token here', null);
+initialize('your spalla token', null);
 
 export default function App() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
@@ -11,7 +11,7 @@ export default function App() {
   const [playing, setPlaying] = React.useState(true);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SpallaPlayer
         ref={playerRef}
         style={styles.videoPlayer}
@@ -32,6 +32,12 @@ export default function App() {
               break;
             case 'pause':
               setPlaying(false);
+              break;
+            case 'muted':
+              setMuted(true);
+              break;
+            case 'unmuted':
+              setMuted(false);
               break;
             default:
               console.log('event', nativeEvent.event);
@@ -57,7 +63,7 @@ export default function App() {
         onPress={() => setMuted(!muted)}
         title={muted ? 'Unmute' : 'Mute'}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

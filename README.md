@@ -12,11 +12,21 @@ npm install react-native-spalla-player
 
 
 ```js
-import { SpallaPlayerView } from "react-native-spalla-player";
+import SpallaPlayer, { initialize } from 'react-native-spalla-player';
+
+// make sure to call initialize as soon as possible on your app. Can be on top of index.js or App.js
+initialize(
+  'your spalla token',
+  null //application id for chromecast. 
+);
 
 // ...
 
-<SpallaPlayerView color="tomato" />
+<SpallaPlayer
+        ref={playerRef}
+        contentId="Spalla contentId"
+        hideUI={false}
+      />
 ```
 
 
