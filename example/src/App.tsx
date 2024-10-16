@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, SafeAreaView, StyleSheet } from 'react-native';
+import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
 import SpallaPlayer, { initialize } from 'react-native-spalla-player';
 
 initialize('your spalla token', null);
@@ -15,7 +15,7 @@ export default function App() {
       <SpallaPlayer
         ref={playerRef}
         style={styles.videoPlayer}
-        contentId="0191e5c9-37fa-7332-949a-8afede0572f4"
+        contentId="Spalla contentId"
         muted={muted}
         hideUI={false}
         onPlayerEvent={({ nativeEvent }) => {
@@ -48,7 +48,9 @@ export default function App() {
             console.log('event', nativeEvent.event);
           }
         }}
-      />
+      >
+        <View style={styles.uicontainer}>{/* Custom UI */}</View>
+      </SpallaPlayer>
       <Button
         onPress={() => {
           if (playing) {
@@ -73,10 +75,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  spacer: {
+    flex: 1,
+    height: 100,
+    backgroundColor: 'green',
+  },
+  uicontainer: {
+    flexDirection: 'column',
+    flex: 1,
   },
   videoPlayer: {
     flex: 1,
