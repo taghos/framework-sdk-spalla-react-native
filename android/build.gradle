@@ -5,6 +5,7 @@ buildscript {
   repositories {
     google()
     mavenCentral()
+    maven { url 'https://maven.theoplayer.com/releases' }
   }
 
   dependencies {
@@ -85,6 +86,7 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven { url 'https://maven.theoplayer.com/releases' }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -95,6 +97,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation("stream.spalla:spalla-android-sdk:1.4.0")
+  implementation("stream.spalla:spalla-android-sdk:1.4.2")
 }
+
 
