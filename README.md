@@ -8,6 +8,21 @@ Spalla SDK for RN
 npm install react-native-spalla-player
 ```
 
+On Android, also add the THEOplayer repository to the list of repositories
+
+```sh
+maven { url 'https://maven.theoplayer.com/releases' } 
+```
+
+For example:
+```sh
+repositories {
+  mavenCentral()
+  google()
+  maven { url 'https://maven.theoplayer.com/releases' } 
+}
+```
+
 ## Usage
 
 ```js
