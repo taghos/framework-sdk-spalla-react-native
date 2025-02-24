@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
-import SpallaPlayer, { initialize } from 'react-native-spalla-player';
+import SpallaPlayer, {
+  initialize,
+  SpallaCastButton,
+} from 'react-native-spalla-player';
 
-initialize('your spalla token', null);
+initialize('your Spalla token', 'Chromecast app id or null');
 
 export default function App() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
@@ -12,10 +15,13 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <SpallaCastButton tintColor="white" />
+      </View>
       <SpallaPlayer
         ref={playerRef}
         style={styles.videoPlayer}
-        contentId="Spalla contentId"
+        contentId="your spalla content id"
         muted={muted}
         hideUI={false}
         onPlayerEvent={({ nativeEvent }) => {
@@ -88,5 +94,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
     width: '100%',
+  },
+  header: {
+    flexDirection: 'row',
+    width: '100%',
+    backgroundColor: 'green',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 10,
   },
 });

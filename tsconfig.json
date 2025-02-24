@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-spalla-player": ["./src/index"]
+      "react-native-spalla-player": ["./src/index", "./src/components/*"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

@@ -105,3 +105,4 @@ export const initialize = (token: String, applicationId: String | null) => {
 };
 
 export default SpallaPlayer;
+export { default as SpallaCastButton } from './components/CastButton';
