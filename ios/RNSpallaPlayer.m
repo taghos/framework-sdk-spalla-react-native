@@ -11,6 +11,8 @@ RCT_EXPORT_VIEW_PROPERTY(muted, BOOL)
 
 RCT_EXPORT_VIEW_PROPERTY(hideUI, BOOL)
 
+RCT_EXPORT_VIEW_PROPERTY(startTime, NSNumber)
+
 RCT_EXPORT_METHOD(play: (nonnull NSNumber *) reactTag {
   
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {

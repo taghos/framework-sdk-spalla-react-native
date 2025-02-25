@@ -45,6 +45,7 @@ interface Props {
   contentId: string;
   muted?: boolean;
   autoplay?: boolean;
+  startTime?: number;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate
@@ -79,8 +80,6 @@ class SpallaPlayer extends React.Component<Props> {
 
   render() {
     const { style } = this.props;
-
-    //const {maxHeight} = this.state;
 
     return (
       <RNSpallaPlayer {...this.props} ref={this._setRef} style={style}>

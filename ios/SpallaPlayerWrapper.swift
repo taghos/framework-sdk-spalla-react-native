@@ -16,9 +16,9 @@ import SpallaSDK
   @objc var contentId: String? {
     didSet {
       print("Content id: \(contentId ?? "nil")")
-      // hacky! this needs to be delayed a bit so hideUI can be set first when comming from RN
+      // hacky! this needs to be delayed a bit so hideUI and startTime can be set first when comming from RN
       // ideally we should use a chromeless class
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
         self.setupPlayer()
       }
     }
@@ -26,15 +26,23 @@ import SpallaSDK
   
   @objc var muted: Bool = false {
     didSet {
-      if muted {
-        viewController.mute()
-      } else {
-        viewController.unmute()
-      }
+      print("Mute called \(muted)")
+      updateMutedState()
     }
   }
   
-  @objc var hideUI: Bool = false
+  @objc var hideUI: Bool = false {
+    didSet {
+      print("Hide UI set to \(hideUI)")
+    }
+  }
+  
+  
+  @objc var startTime: NSNumber = 10 {
+    didSet {
+      print("Start time set \(startTime)")
+    }
+  }
   
   @objc var onPlayerEvent: RCTBubblingEventBlock?
   
@@ -70,7 +78,8 @@ import SpallaSDK
   
   func setupPlayer() {
     if let contentId {
-      viewController.setup(with: contentId, isLive: false, hideUI: hideUI)
+      print("Start time \(startTime)")
+      viewController.setup(with: contentId, isLive: false, hideUI: hideUI, startTime: startTime.doubleValue)
     }
   }
   
@@ -85,6 +94,16 @@ import SpallaSDK
   @objc public func seekTo(time: Float) {
     viewController.seekTo(time: TimeInterval(time))
   }
+  
+  private func updateMutedState() {
+    viewController.mute()
+    if muted {
+      viewController.mute()
+    } else {
+      viewController.unmute()
+    }
+  }
+    
   
   @objc static public func initialize(token: String, applicationId: String) {
     Spalla.shared.initialize(token: token, applicationId: applicationId)

@@ -24,6 +24,7 @@ export default function App() {
         contentId="your spalla content id"
         muted={muted}
         hideUI={false}
+        startTime={50}
         onPlayerEvent={({ nativeEvent }) => {
           switch (nativeEvent.event) {
             case 'timeUpdate':

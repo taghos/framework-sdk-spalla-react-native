@@ -18,6 +18,9 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
   private var _playerView: SpallaPlayerView? = null
   private var _reactContext: ReactContext? = null
 
+  private var contentId: String? = null
+  private var startTime: Double? = null
+
   override fun getName() = "RNSpallaPlayer"
 
   override fun createViewInstance(context: ThemedReactContext): SpallaPlayerView {
@@ -54,12 +57,25 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
 
   @ReactProp(name = "contentId")
   fun setContentId(view: SpallaPlayerView, contentId: String) {
-    _playerView?.load(contentId, false, true)
+     this.contentId = contentId
+      checkAndLoadPlayer(view)
   }
 
   @ReactProp(name = "muted")
   fun setMuted(view: SpallaPlayerView, muted: Boolean) {
     _playerView?.setMuted(muted)
+  }
+
+  @ReactProp(name = "startTime")
+  fun setStartTime(view: SpallaPlayerView, startTime: Double) {
+    this.startTime = startTime
+    checkAndLoadPlayer(view)
+  }
+
+  private fun checkAndLoadPlayer(view: SpallaPlayerView) {
+    if (contentId != null && startTime != null) {
+        view.load(contentId!!, false, true, startTime!!)
+    }
   }
 
   override fun onEvent( spallaPlayerEvent: SpallaPlayerEvent) {

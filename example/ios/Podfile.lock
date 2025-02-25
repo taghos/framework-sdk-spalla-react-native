@@ -1258,7 +1258,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - SpallaSDK (~> 0.7.4)
+    - SpallaSDK (~> 0.8.0)
     - Yoga
   - React-nativeconfig (0.75.4)
   - React-NativeModulesApple (0.75.4):
@@ -1521,7 +1521,7 @@ PODS:
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
   - SocketRocket (0.7.0)
-  - SpallaSDK (0.7.4):
+  - SpallaSDK (0.8.0):
     - GoogleAds-IMA-iOS-SDK (= 3.23.0)
   - Yoga (0.0.0)
 
@@ -1764,7 +1764,7 @@ SPEC CHECKSUMS:
   React-logger: d79b704bf215af194f5213a6b7deec50ba8e6a9b
   React-Mapbuffer: b982d5bba94a8bc073bda48f0d27c9b28417fae3
   React-microtasksnativemodule: 2b73e68f0462f3175f98782db08896f8501afd20
-  react-native-spalla-player: 2fab97310ebeddd486cef58cfd222460cef3758c
+  react-native-spalla-player: 0115b1801a6d6828abc28ef0ea65b7157366f3e4
   React-nativeconfig: 8c83d992b9cc7d75b5abe262069eaeea4349f794
   React-NativeModulesApple: 9f7920224a3b0c7d04d77990067ded14cee3c614
   React-perflogger: 59e1a3182dca2cee7b9f1f7aab204018d46d1914
@@ -1792,7 +1792,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 4bcb34e6b5ebf6eef5cee34f55aa39991ea1c1f1
   ReactCommon: 6a952e50c2a4b694731d7682aaa6c79bc156e4ad
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  SpallaSDK: 7870c672ef4be0855b59ab47eb198cfc5073ec70
+  SpallaSDK: e620bd8e800e2011ee4d9bf6b17d6ed54667fb10
   Yoga: 055f92ad73f8c8600a93f0e25ac0b2344c3b07e6
 
 PODFILE CHECKSUM: 5530ddd5a5d72ac85b68c356ee3763128eedd925
