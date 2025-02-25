@@ -23,6 +23,7 @@ repositories {
 }
 ```
 
+
 ## Usage
 
 ```js
@@ -100,6 +101,7 @@ const [playing, setPlaying] = React.useState(true);
 | **`contentId`**    | string   | Spalla contentId that will be played
 | **`hideUI`**       | boolean  | hide or show the default UI (its a prop, but it can only be set once)
 | **`muted`**        | boolean  | mute/unmute video
+| **`startTime`**    | number  | time to start the video in seconds (defaults to 0 = start of the video)
 | **`onPlayerEvent`**| callback | Function that will be called with player events
 
 ## Imperative Methods
@@ -117,6 +119,48 @@ playerRef.current?.play();
 playerRef.current?.pause();
 playerRef.current?.seekTo(12); //position in seconds, if higher than duration it will move to the end
 ```
+
+## Chromecast
+
+If you are using Chromecast, there are a few changes that needs to be done:
+
+```js
+// Add the application id for chromecast. In this example, A123456
+initialize(
+  'your spalla token',
+  'A123456'
+);
+```
+
+On iOS, open Xcode, open info.plist file as SourceCode, and copy this inside the main dict. Make sure to change A123456 with your App ID (keep the underscore at the start). More details on this [link](https://developers.google.com/cast/docs/ios_sender/permissions_and_discovery#updating_your_app_on_ios_14) if needed.
+```
+<key>NSBonjourServices</key>
+<array>
+  <string>_googlecast._tcp</string>
+  <string>_A123456._googlecast._tcp</string>
+</array>
+<key>NSLocalNetworkUsageDescription</key>
+<string>We need network access to search for Cast devices</string>
+```
+
+On Android, open Manifest.xml and add this meta data tag inside the <application> tag (same level as activities). As before, change A123456 with your App ID.
+
+```
+<meta-data
+    android:name="com.spalla.sdk.CAST_ID"
+    android:value="A123456"/>
+```
+
+Spalla provides a RN View that you can use to add the cast button to your interface. Check the example app if you need an example of usage
+
+```js
+import { SpallaCastButton } from 'react-native-spalla-player';
+
+[...]
+
+return <SpallaCastButton tintColor="white" />
+```
+
 
 ## Contributing
 
