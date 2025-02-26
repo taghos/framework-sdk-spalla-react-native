@@ -9,6 +9,7 @@ import {
 interface RNSpallaPlayerProps {
   children?: React.ReactNode;
   style?: ViewStyle;
+  startTime: number;
   ref?: (ref: any) => void;
 }
 
@@ -79,10 +80,15 @@ class SpallaPlayer extends React.Component<Props> {
   };
 
   render() {
-    const { style } = this.props;
+    const { style, startTime } = this.props;
 
     return (
-      <RNSpallaPlayer {...this.props} ref={this._setRef} style={style}>
+      <RNSpallaPlayer
+        {...this.props}
+        ref={this._setRef}
+        style={style}
+        startTime={startTime ?? 0}
+      >
         {this.props.children}
       </RNSpallaPlayer>
     );
