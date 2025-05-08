@@ -41,6 +41,7 @@ const playerRef = React.useRef<SpallaPlayer | null>(null);
 
 const [muted, setMuted] = React.useState(false);
 const [playing, setPlaying] = React.useState(true);
+const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 
 <SafeAreaView style={styles.container}>
   <SpallaPlayer
@@ -49,6 +50,7 @@ const [playing, setPlaying] = React.useState(true);
     contentId="Spalla contentId"
     muted={muted}
     hideUI={false}
+    subtitle={subtitle}
     onPlayerEvent={({ nativeEvent }) => {
       switch (nativeEvent.event) {
         case 'timeUpdate':
@@ -69,6 +71,13 @@ const [playing, setPlaying] = React.useState(true);
           break;
         case 'unmuted':
           setMuted(false);
+          break;
+        case 'subtitleSelected':
+          console.log('subtitleSelected', nativeEvent.subtitle);
+          setSubtitle(nativeEvent.subtitle);
+          break;
+        case 'subtitlesAvailable':
+          console.log('subtitlesAvailable', nativeEvent.subtitles);
           break;
         default:
           console.log('event', nativeEvent.event);
@@ -103,6 +112,7 @@ const [playing, setPlaying] = React.useState(true);
 | **`muted`**        | boolean  | mute/unmute video
 | **`startTime`**    | number  | time to start the video in seconds (defaults to 0 = start of the video)
 | **`onPlayerEvent`**| callback | Function that will be called with player events
+| **`subtitle`**     | string  | subtitle to enable. Null will hide subtitles
 
 ## Imperative Methods
 
