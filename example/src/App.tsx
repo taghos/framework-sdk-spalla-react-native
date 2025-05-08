@@ -12,6 +12,7 @@ export default function App() {
 
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
+  const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 
   return (
     <SafeAreaView style={styles.container}>
