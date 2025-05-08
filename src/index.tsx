@@ -10,6 +10,7 @@ interface RNSpallaPlayerProps {
   children?: React.ReactNode;
   style?: ViewStyle;
   startTime: number;
+  subtitle?: String | null;
   ref?: (ref: any) => void;
 }
 
@@ -28,6 +29,15 @@ interface PlayerEventDurationUpdate {
   duration: number;
 }
 
+interface PlayerEventSubtitlesAvailable {
+  event: 'subtitlesAvailable';
+  subtitles: Array<String>;
+}
+
+interface PlayerEventSubtitleSelected {
+  event: 'subtitleSelected';
+  subtitle: String;
+}
 interface PlayerEvent {
   event:
     | 'play'
@@ -47,11 +57,14 @@ interface Props {
   muted?: boolean;
   autoplay?: boolean;
   startTime?: number;
+  subtitle?: String | null;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate
       | PlayerEvent
-      | PlayerEventDurationUpdate;
+      | PlayerEventDurationUpdate
+      | PlayerEventSubtitlesAvailable
+      | PlayerEventSubtitleSelected;
   }) => void;
 }
 

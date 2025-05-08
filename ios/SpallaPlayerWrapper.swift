@@ -17,7 +17,6 @@ import SpallaSDK
     didSet {
       print("Content id: \(contentId ?? "nil")")
       // hacky! this needs to be delayed a bit so hideUI and startTime can be set first when comming from RN
-      // ideally we should use a chromeless class
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
         self.setupPlayer()
       }
@@ -41,6 +40,13 @@ import SpallaSDK
   @objc var startTime: NSNumber = 10 {
     didSet {
       print("Start time set \(startTime)")
+    }
+  }
+  
+  @objc var subtitle: String? = nil {
+    didSet {
+      print("Initial subtitle set \(subtitle ?? "nil")")
+      viewController.selectSubtitle(subtitle: subtitle)
     }
   }
   
@@ -78,8 +84,7 @@ import SpallaSDK
   
   func setupPlayer() {
     if let contentId {
-      print("Start time \(startTime)")
-      viewController.setup(with: contentId, isLive: false, hideUI: hideUI, startTime: startTime.doubleValue)
+      viewController.setup(with: contentId, isLive: false, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle)
     }
   }
   
@@ -93,6 +98,10 @@ import SpallaSDK
   
   @objc public func seekTo(time: Float) {
     viewController.seekTo(time: TimeInterval(time))
+  }
+  
+  @objc public func selectSubtitle(_ subtitle: String?) {
+    viewController.selectSubtitle(subtitle: subtitle)
   }
   
   private func updateMutedState() {
@@ -141,6 +150,10 @@ extension SpallaPlayerWrapper: SpallaPlayerListener {
       onPlayerEvent(["event": "timeUpdate", "time": time])
     case .waiting:
       onPlayerEvent(["event": "buffering"])
+    case .subtitlesAvailable(let subtitles):
+      onPlayerEvent(["event": "subtitlesAvailable", "subtitles": subtitles])
+    case .subtitleSelected(let subtitle):
+      onPlayerEvent(["event": "subtitleSelected", "subtitle": subtitle != nil ? subtitle! : NSNull()])
     @unknown default:
       break
     }

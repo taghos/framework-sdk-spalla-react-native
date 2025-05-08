@@ -25,6 +25,7 @@ export default function App() {
         muted={muted}
         hideUI={false}
         startTime={50}
+        subtitle={subtitle}
         onPlayerEvent={({ nativeEvent }) => {
           switch (nativeEvent.event) {
             case 'timeUpdate':
@@ -46,14 +47,20 @@ export default function App() {
             case 'unmuted':
               setMuted(false);
               break;
+            case 'subtitleSelected':
+              console.log('subtitleSelected', nativeEvent.subtitle);
+              break;
+            case 'subtitlesAvailable':
+              console.log('subtitlesAvailable', nativeEvent.subtitles);
+              break;
             default:
               console.log('event', nativeEvent.event);
           }
-          if (nativeEvent.event === 'timeUpdate') {
+          /*if (nativeEvent.event === 'timeUpdate') {
             console.log('timeupdate', nativeEvent.time);
           } else {
             console.log('event', nativeEvent.event);
-          }
+          }*/
         }}
       >
         <View style={styles.uicontainer}>{/* Custom UI */}</View>
@@ -71,6 +78,12 @@ export default function App() {
       <Button
         onPress={() => setMuted(!muted)}
         title={muted ? 'Unmute' : 'Mute'}
+      />
+      <Button
+        onPress={() => {
+          setSubtitle(subtitle ? null : 'pt-br');
+        }}
+        title={subtitle ? 'Disable subtitles' : 'Enable subtitles'}
       />
     </SafeAreaView>
   );

@@ -3,6 +3,9 @@ package com.spallaplayer
 import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableNativeArray
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -101,7 +104,12 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
       Waiting -> map.putString("event", "buffering")
       is SubtitlesAvailable -> {
         map.putString("event", "subtitlesAvailable")
-        map.putString("subtitles", spallaPlayerEvent.subtitles.toString())
+
+        var subs = Arguments.createArray()
+        spallaPlayerEvent.subtitles.forEach { 
+          subs.pushString(it)
+        }
+        map.putArray("subtitles", subs)
       }
       is SubtitleSelected -> {
         map.putString("event", "subtitleSelected")

@@ -31,7 +31,7 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
   }
 
   override fun onHostPause() {
-    
+
   }
 
   override fun onHostDestroy() {
