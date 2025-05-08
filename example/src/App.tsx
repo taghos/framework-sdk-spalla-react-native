@@ -49,6 +49,7 @@ export default function App() {
               break;
             case 'subtitleSelected':
               console.log('subtitleSelected', nativeEvent.subtitle);
+              setSubtitle(nativeEvent.subtitle);
               break;
             case 'subtitlesAvailable':
               console.log('subtitlesAvailable', nativeEvent.subtitles);

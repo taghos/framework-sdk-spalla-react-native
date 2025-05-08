@@ -16,6 +16,8 @@ import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent
 import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.*
 import com.spalla.sdk.android.core.player.listeners.SpallaPlayerListener
 import com.spalla.sdk.android.core.player.view.SpallaPlayerView
+import java.util.Timer
+import java.util.TimerTask
 
 class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPlayerListener {
   private var _playerView: SpallaPlayerView? = null
@@ -23,6 +25,8 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
 
   private var contentId: String? = null
   private var startTime: Double? = null
+  private var subtitle: String? = null
+  private var loadTimer: Timer? = null
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -72,13 +76,35 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
   @ReactProp(name = "startTime")
   fun setStartTime(view: SpallaPlayerView, startTime: Double) {
     this.startTime = startTime
-    checkAndLoadPlayer(view)
+    //checkAndLoadPlayer(view)
+  }
+
+  @ReactProp(name = "subtitle")
+  fun setSubtitle(view: SpallaPlayerView, subtitle: String?) {
+    this.subtitle = subtitle
+    _playerView?.selectSubtitle(subtitle)
   }
 
   private fun checkAndLoadPlayer(view: SpallaPlayerView) {
     if (contentId != null && startTime != null) {
         view.load(contentId!!, false, true, startTime!!)
     }
+  }
+
+  private fun startLoadTimer(view: SpallaPlayerView) {
+    // Cancel any existing timer
+    loadTimer?.cancel()
+
+    // Start a new timer to check if all required properties are set
+    loadTimer = Timer()
+    loadTimer?.schedule(object : TimerTask() {
+      override fun run() {
+          loadTimer?.cancel()
+          loadTimer = null
+          // Call view.load with the required properties
+          view.load(contentId!!, false, true, startTime!!, subtitle)
+      }
+    }, 300) // Delay of 200ms to allow all properties to be set
   }
 
   override fun onEvent( spallaPlayerEvent: SpallaPlayerEvent) {
@@ -106,7 +132,7 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
         map.putString("event", "subtitlesAvailable")
 
         var subs = Arguments.createArray()
-        spallaPlayerEvent.subtitles.forEach { 
+        spallaPlayerEvent.subtitles.forEach {
           subs.pushString(it)
         }
         map.putArray("subtitles", subs)

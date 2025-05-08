@@ -45,7 +45,7 @@ import SpallaSDK
   
   @objc var subtitle: String? = nil {
     didSet {
-      print("Initial subtitle set \(subtitle ?? "nil")")
+      print("Subtitle set \(subtitle ?? "nil")")
       viewController.selectSubtitle(subtitle: subtitle)
     }
   }
