@@ -99,6 +99,14 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
         map.putDouble("time", spallaPlayerEvent.currentTime)
       }
       Waiting -> map.putString("event", "buffering")
+      is SubtitlesAvailable -> {
+        map.putString("event", "subtitlesAvailable")
+        map.putString("subtitles", spallaPlayerEvent.subtitles.toString())
+      }
+      is SubtitleSelected -> {
+        map.putString("event", "subtitleSelected")
+        map.putString("subtitle", spallaPlayerEvent.subtitle)
+      }
     }
     _playerView?.let { player ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
@@ -107,6 +115,13 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
         map
       )
     }
-
   }
+
+
+    // Expose a method to set the current subtitle track
+    fun setSubtitleTrack(view: SpallaPlayerView, trackId: String) {
+      //check if current trackId exists
+
+        //view.setSubtitleTrack(trackId)
+    }
 }
