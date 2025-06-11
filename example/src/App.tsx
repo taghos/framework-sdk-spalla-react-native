@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, View, SafeAreaView } from 'react-native';
 import SpallaPlayer, {
   initialize,
   SpallaCastButton,
@@ -13,6 +13,9 @@ export default function App() {
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
   const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
+  const [playbackRate, setPlaybackRate] = React.useState<
+    0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
+  >(1.0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,6 +30,7 @@ export default function App() {
         hideUI={false}
         startTime={50}
         subtitle={subtitle}
+        playbackRate={playbackRate}
         onPlayerEvent={({ nativeEvent }) => {
           switch (nativeEvent.event) {
             case 'timeUpdate':
@@ -55,6 +59,17 @@ export default function App() {
             case 'subtitlesAvailable':
               console.log('subtitlesAvailable', nativeEvent.subtitles);
               break;
+            case 'playbackRateSelected':
+              console.log('playbackRateSelected', nativeEvent.rate);
+              setPlaybackRate(nativeEvent.rate);
+              break;
+            case 'metadataLoaded':
+              console.log(
+                'metadataLoaded',
+                nativeEvent.isLive,
+                nativeEvent.duration
+              );
+              break;
             default:
               console.log('event', nativeEvent.event);
           }
@@ -67,26 +82,37 @@ export default function App() {
       >
         <View style={styles.uicontainer}>{/* Custom UI */}</View>
       </SpallaPlayer>
-      <Button
-        onPress={() => {
-          if (playing) {
-            playerRef.current?.pause();
-          } else {
-            playerRef.current?.play();
-          }
-        }}
-        title={playing ? 'Pause' : 'Play'}
-      />
-      <Button
-        onPress={() => setMuted(!muted)}
-        title={muted ? 'Unmute' : 'Mute'}
-      />
-      <Button
-        onPress={() => {
-          setSubtitle(subtitle ? null : 'pt-br');
-        }}
-        title={subtitle ? 'Disable subtitles' : 'Enable subtitles'}
-      />
+      <View style={styles.hstack}>
+        <Button
+          onPress={() => {
+            if (playing) {
+              playerRef.current?.pause();
+            } else {
+              playerRef.current?.play();
+            }
+          }}
+          title={playing ? 'Pause' : 'Play'}
+        />
+        <Button
+          onPress={() => setMuted(!muted)}
+          title={muted ? 'Unmute' : 'Mute'}
+        />
+      </View>
+      <View style={styles.hstack}>
+        <Button
+          onPress={() => {
+            setSubtitle(subtitle ? null : 'pt-br');
+          }}
+          title={subtitle ? 'Disable subtitles' : 'Enable subtitles'}
+        />
+        <Button
+          onPress={() => {
+            setPlaybackRate(playbackRate === 1.0 ? 0.5 : 1.0);
+          }}
+          title={playbackRate.toString() + 'x'}
+        />
+      </View>
+      <View style={styles.bottom} />
     </SafeAreaView>
   );
 }
@@ -119,5 +145,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingHorizontal: 10,
+  },
+  bottom: {
+    height: 50,
+  },
+  hstack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 8,
   },
 });

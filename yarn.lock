@@ -12916,6 +12916,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-safe-area-context@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "react-native-safe-area-context@npm:5.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 695e2a46a988725ac7a948e2a0f52fa91dbf6cfd29e7fd8c4b9e511022279cc7530fcec5dc6430415dcb5d137c593c53dd88249d41d1e049a254c32421a12d44
+  languageName: node
+  linkType: hard
+
 "react-native-spalla-player-example@workspace:example":
   version: 0.0.0-use.local
   resolution: "react-native-spalla-player-example@workspace:example"
@@ -12935,6 +12945,7 @@ __metadata:
     prettier: 2.8.8
     react: 19.0.0
     react-native: 0.79.2
+    react-native-safe-area-context: ^5.4.1
     react-test-renderer: 19.0.0
     typescript: 5.0.4
   languageName: unknown

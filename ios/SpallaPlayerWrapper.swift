@@ -49,6 +49,12 @@ import SpallaSDK
       viewController.selectSubtitle(subtitle: subtitle)
     }
   }
+
+  @objc var playbackRate: NSNumber = 1.0 {
+    didSet {
+      viewController.setPlaybackRate(rate: playbackRate.doubleValue)
+    }
+  }
   
   @objc var onPlayerEvent: RCTBubblingEventBlock?
   
@@ -104,6 +110,10 @@ import SpallaSDK
     viewController.selectSubtitle(subtitle: subtitle)
   }
   
+  @objc public func selectPlaybackRate(_ rate: Double) {
+    viewController.setPlaybackRate(rate: rate)
+  }
+  
   private func updateMutedState() {
     viewController.mute()
     if muted {
@@ -154,6 +164,10 @@ extension SpallaPlayerWrapper: SpallaPlayerListener {
       onPlayerEvent(["event": "subtitlesAvailable", "subtitles": subtitles])
     case .subtitleSelected(let subtitle):
       onPlayerEvent(["event": "subtitleSelected", "subtitle": subtitle != nil ? subtitle! : NSNull()])
+    case .metadataLoaded(let metadata):
+      onPlayerEvent(["event": "metadataLoaded", "isLive": metadata.isLive, "duration": metadata.duration])
+    case .playbackRateChanged(let rate):
+      onPlayerEvent(["event": "playbackRateSelected", "rate": rate])
     @unknown default:
       break
     }

@@ -79,6 +79,16 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
         case 'subtitlesAvailable':
           console.log('subtitlesAvailable', nativeEvent.subtitles);
           break;
+        case 'playbackRateSelected':
+          setPlaybackRate(nativeEvent.rate);
+          break;
+        case 'metadataLoaded':
+          console.log(
+            'metadataLoaded',
+            nativeEvent.isLive,
+            nativeEvent.duration
+          );
+          break;
         default:
           console.log('event', nativeEvent.event);
       }
@@ -113,6 +123,7 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 | **`startTime`**    | number  | time to start the video in seconds (defaults to 0 = start of the video)
 | **`onPlayerEvent`**| callback | Function that will be called with player events
 | **`subtitle`**     | string  | subtitle to enable. Null will hide subtitles
+| **`playbackRate`**     | number  | Playback speed. Allowed values are 0.5, 1.0, 1.5 and 2.0
 
 ## Imperative Methods
 

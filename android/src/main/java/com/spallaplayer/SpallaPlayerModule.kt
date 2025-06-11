@@ -39,8 +39,23 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun play(tag: Int) {
-    _reactContext.getNativeModule(UIManagerModule::class.java)!!
-      .prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
+      if (uiManager is UIManager) {
+        uiManager.resolveView(tag)?.let { view ->
+          if (view is SpallaPlayerView) {
+            view.play()
+          } else {
+            throw ClassCastException(
+              "Cannot play: view with tag #$tag is not a SpallaPlayerView"
+            )
+          }
+        }
+      }
+    } else {
+      val uiManager: UIManagerModule? =
+        _reactContext.getNativeModule(UIManagerModule::class.java)
+      uiManager?.prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
         if (playerView is SpallaPlayerView) {
           playerView.play()
@@ -53,11 +68,11 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
           )
         }
       }
+    }
   }
 
   @ReactMethod
   fun pause(tag: Int) {
-
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
       if (uiManager is UIManager) {
@@ -117,6 +132,24 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
         val playerView = nativeViewHierarchyManager.resolveView(tag)
         if (playerView is SpallaPlayerView) {
           playerView.selectSubtitle(subtitle)
+        } else {
+          throw ClassCastException(
+            String.format(
+              "Cannot play: view with tag #%d is not a SpallaPplayerView",
+              tag
+            )
+          )
+        }
+      }
+  }
+
+  @ReactMethod
+  fun selectPlaybackRate(tag: Int, rate: Double) {
+    _reactContext.getNativeModule(UIManagerModule::class.java)!!
+      .prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
+        val playerView = nativeViewHierarchyManager.resolveView(tag)
+        if (playerView is SpallaPlayerView) {
+          playerView.selectPlaybackRate(rate)
         } else {
           throw ClassCastException(
             String.format(

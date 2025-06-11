@@ -15,6 +15,8 @@ RCT_EXPORT_VIEW_PROPERTY(startTime, NSNumber)
 
 RCT_EXPORT_VIEW_PROPERTY(subtitle, NSString)
 
+RCT_EXPORT_VIEW_PROPERTY(playbackRate, NSNumber)
+
 RCT_EXPORT_METHOD(play: (nonnull NSNumber *) reactTag {
   
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
@@ -61,6 +63,18 @@ RCT_EXPORT_METHOD(selectSubtitle: (nonnull NSNumber *) reactTag subtitle:(NSStri
               return;
           } else {
             [(SpallaPlayerWrapper *)view selectSubtitle: subtitle];
+          }
+  }];
+}
+
+RCT_EXPORT_METHOD(selectPlaybackRate: (nonnull NSNumber *) reactTag rate:(NSNumber *)rate) {
+  [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+          UIView *view = viewRegistry[reactTag];
+          if (!view || ![view isKindOfClass:[SpallaPlayerWrapper class]]) {
+              RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+              return;
+          } else {
+            [(SpallaPlayerWrapper *)view selectPlaybackRate: rate.doubleValue];
           }
   }];
 }

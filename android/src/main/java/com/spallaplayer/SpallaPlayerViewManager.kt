@@ -27,6 +27,7 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
   private var startTime: Double? = null
   private var subtitle: String? = null
   private var loadTimer: Timer? = null
+  private var playbackRate: Double = 1.0
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -85,6 +86,14 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
     _playerView?.selectSubtitle(subtitle)
   }
 
+  @ReactProp(name = "playbackRate")
+  fun setPlaybackRate(view: SpallaPlayerView, playbackRate: Double) {
+    if(playbackRate > 0) {
+      this.playbackRate = playbackRate
+      _playerView?.selectPlaybackRate(playbackRate)
+    }
+  }
+
   private fun checkAndLoadPlayer(view: SpallaPlayerView) {
     if (contentId != null && startTime != null) {
         view.load(contentId!!, false, true, startTime!!)
@@ -141,6 +150,19 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
         map.putString("event", "subtitleSelected")
         map.putString("subtitle", spallaPlayerEvent.subtitle)
       }
+      is MetadataLoaded -> {
+        map.putString("event", "metadataLoaded")
+        map.putBoolean("isLive", spallaPlayerEvent.metadata.isLive)
+        map.putDouble("duration", spallaPlayerEvent.metadata.duration)
+
+        // make sure current playback rate is applied if set initially
+        _playerView?.selectPlaybackRate(playbackRate)
+      }
+      is PlaybackRateSelected -> {
+        map.putString("event", "playbackRateSelected")
+        map.putDouble("rate", spallaPlayerEvent.rate)
+      }
+
     }
     _playerView?.let { player ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
@@ -151,11 +173,4 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
     }
   }
 
-
-    // Expose a method to set the current subtitle track
-    fun setSubtitleTrack(view: SpallaPlayerView, trackId: String) {
-      //check if current trackId exists
-
-        //view.setSubtitleTrack(trackId)
-    }
 }

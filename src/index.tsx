@@ -6,11 +6,14 @@ import {
   findNodeHandle,
 } from 'react-native';
 
+type allowedPlaybackRates = 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
+
 interface RNSpallaPlayerProps {
   children?: React.ReactNode;
   style?: ViewStyle;
   startTime: number;
   subtitle?: String | null;
+  playbackRate?: allowedPlaybackRates;
   ref?: (ref: any) => void;
 }
 
@@ -38,6 +41,18 @@ interface PlayerEventSubtitleSelected {
   event: 'subtitleSelected';
   subtitle: String;
 }
+
+interface PlayerEventPlaybackRateSelected {
+  event: 'playbackRateSelected';
+  rate: allowedPlaybackRates;
+}
+
+interface PlayerEventMedataLoaded {
+  event: 'metadataLoaded';
+  isLive: boolean;
+  duration: number;
+}
+
 interface PlayerEvent {
   event:
     | 'play'
@@ -58,13 +73,16 @@ interface Props {
   autoplay?: boolean;
   startTime?: number;
   subtitle?: String | null;
+  playbackRate?: 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate
       | PlayerEvent
       | PlayerEventDurationUpdate
       | PlayerEventSubtitlesAvailable
-      | PlayerEventSubtitleSelected;
+      | PlayerEventSubtitleSelected
+      | PlayerEventPlaybackRateSelected
+      | PlayerEventMedataLoaded;
   }) => void;
 }
 
@@ -93,7 +111,7 @@ class SpallaPlayer extends React.Component<Props> {
   };
 
   render() {
-    const { style, startTime } = this.props;
+    const { style, startTime, playbackRate } = this.props;
 
     return (
       <RNSpallaPlayer
@@ -101,6 +119,7 @@ class SpallaPlayer extends React.Component<Props> {
         ref={this._setRef}
         style={style}
         startTime={startTime ?? 0}
+        playbackRate={playbackRate ?? 1.0}
       >
         {this.props.children}
       </RNSpallaPlayer>
