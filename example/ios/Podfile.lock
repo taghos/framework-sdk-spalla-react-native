@@ -5,7 +5,7 @@ PODS:
   - FBLazyVector (0.79.2)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - GoogleAds-IMA-iOS-SDK (3.23.0)
+  - google-cast-sdk-dynamic-xcframework (4.8.3)
   - hermes-engine (0.79.2):
     - hermes-engine/Pre-built (= 0.79.2)
   - hermes-engine/Pre-built (0.79.2)
@@ -1408,7 +1408,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-spalla-player (0.8.0):
+  - react-native-spalla-player (0.10.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1431,7 +1431,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - SpallaSDK (~> 1.8.2)
+    - SpallaSDK (~> 2.0.2)
     - Yoga
   - React-NativeModulesApple (0.79.2):
     - glog
@@ -1756,8 +1756,16 @@ PODS:
     - React-perflogger (= 0.79.2)
     - React-utils (= 0.79.2)
   - SocketRocket (0.7.1)
-  - SpallaSDK (1.8.2):
-    - GoogleAds-IMA-iOS-SDK (= 3.23.0)
+  - SpallaSDK (2.0.2):
+    - THEOplayer-Integration-GoogleCast
+    - THEOplayerSDK-core (~> 9.5.1)
+  - THEOplayer-Integration-GoogleCast (9.5.1):
+    - THEOplayer-Integration-GoogleCast/Base (= 9.5.1)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.5.1)
+  - THEOplayer-Integration-GoogleCast/Base (9.5.1)
+  - THEOplayer-Integration-GoogleCast/Dependencies (9.5.1):
+    - google-cast-sdk-dynamic-xcframework (~> 4.8)
+  - THEOplayerSDK-core (9.5.1)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1838,9 +1846,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - GoogleAds-IMA-iOS-SDK
+    - google-cast-sdk-dynamic-xcframework
     - SocketRocket
     - SpallaSDK
+    - THEOplayer-Integration-GoogleCast
+    - THEOplayerSDK-core
 
 EXTERNAL SOURCES:
   boost:
@@ -1996,7 +2006,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  GoogleAds-IMA-iOS-SDK: ee2a68ed7a1a17c7bb81bdb1b81590b35a3fc8f3
+  google-cast-sdk-dynamic-xcframework: d4dd8d548462f2a4874515fee68c17805d44be42
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 83ffb90c23ee5cea353bd32008a7bca100908f8c
@@ -2030,7 +2040,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: c04fcda1c6281fc0a6824c7dcc1633dd217ac1ec
   React-microtasksnativemodule: ca2804a25fdcefffa0aa942aa23ab53b99614a34
   react-native-safe-area-context: dc279397abf103b0577f48c548630b7e639646a7
-  react-native-spalla-player: 3160f3852ea4dd35dd3a24cf4c63ebb675f69f44
+  react-native-spalla-player: e18be5aac3369766f7e0a9242709d3c8acc90e7c
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 6fd2f6811533e9c19a61e855c3033eecbf4ad2a0
@@ -2063,7 +2073,9 @@ SPEC CHECKSUMS:
   ReactCodegen: fda99a79c866370190e162083a35602fdc314e5d
   ReactCommon: 4d0da92a5eb8da86c08e3ec34bd23ab439fb2461
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  SpallaSDK: bdef881a335fd0bebbc5832cf2aa4dd5f3c3242b
+  SpallaSDK: ee38b3013bae8dd07ae217f02e44ad0318c04b1a
+  THEOplayer-Integration-GoogleCast: ecbb7608bf3b1d11def60f97050d1e09db182304
+  THEOplayerSDK-core: df3ec4ed64e19bd006f6a5476d96161e07f700a3
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
 
 PODFILE CHECKSUM: dcd6391baf847f3bf474bacf57fa8bf887373a20

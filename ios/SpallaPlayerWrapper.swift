@@ -90,7 +90,7 @@ import SpallaSDK
   
   func setupPlayer() {
     if let contentId {
-      viewController.setup(with: contentId, isLive: false, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle)
+      viewController.setup(with: contentId, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle)
     }
   }
   
