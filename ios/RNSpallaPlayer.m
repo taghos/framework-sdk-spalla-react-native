@@ -85,6 +85,18 @@ RCT_EXPORT_METHOD(initialize: (nonnull NSString *) token: (NSString *) applicati
   });
 }
 
+RCT_EXPORT_METHOD(unmount: (nonnull NSNumber *) reactTag {
+  [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+          UIView *view = viewRegistry[reactTag];
+          if (!view || ![view isKindOfClass:[SpallaPlayerWrapper class]]) {
+              RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+              return;
+          } else {
+            [(SpallaPlayerWrapper *)view unmount];
+          }
+  }];
+})
+
 RCT_EXPORT_VIEW_PROPERTY(onPlayerEvent, RCTBubblingEventBlock)
 
 @end

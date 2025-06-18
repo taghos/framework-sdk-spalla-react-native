@@ -162,8 +162,32 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun unmount(tag: Int) {
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
+      if (uiManager is UIManager) {
+        uiManager.resolveView(tag)?.let { view ->
+          if (view is SpallaPlayerView) {
+            view.pause()
+          }
+        }
+      }
+    } else {
+      val uiManager: UIManagerModule? =
+        _reactContext.getNativeModule(UIManagerModule::class.java)
+      uiManager?.prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
+        val playerView = nativeViewHierarchyManager.resolveView(tag)
+        if (playerView is SpallaPlayerView) {
+          playerView.pause()
+        } 
+      }
+    }
+  }
+
+  @ReactMethod
   fun initialize(token: String, applicationId: String?) {
     SpallaSDK.initialize(_reactContext, token)
   }
+
 
 }

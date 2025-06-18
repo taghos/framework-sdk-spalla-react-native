@@ -127,6 +127,11 @@ import SpallaSDK
   @objc static public func initialize(token: String, applicationId: String) {
     Spalla.shared.initialize(token: token, applicationId: applicationId)
   }
+
+  @objc public func unmount() {
+    viewController.pause()
+    viewController.removeFromParent()
+  }
   
   deinit {
     viewController.pause()

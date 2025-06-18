@@ -135,6 +135,11 @@ class SpallaPlayer extends React.Component<Props> {
     const handle = findNodeHandle(this._player);
     RNSpallaPlayerModule.pause(handle);
   };
+
+  componentWillUnmount() {
+    const handle = findNodeHandle(this._player);
+    RNSpallaPlayerModule.unmount(handle);
+  }
 }
 
 export const initialize = (token: String, applicationId: String | null) => {
