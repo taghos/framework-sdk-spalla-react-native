@@ -134,7 +134,7 @@ import SpallaSDK
   }
   
   deinit {
-    viewController.pause()
+    //viewController.pause()
     viewController.removeFromParent()
   }
 }
