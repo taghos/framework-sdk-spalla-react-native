@@ -14,6 +14,7 @@ interface RNSpallaPlayerProps {
   startTime: number;
   subtitle?: String | null;
   playbackRate?: allowedPlaybackRates;
+  hideUI?: boolean;
   ref?: (ref: any) => void;
 }
 
@@ -111,7 +112,7 @@ class SpallaPlayer extends React.Component<Props> {
   };
 
   render() {
-    const { style, startTime, playbackRate } = this.props;
+    const { style, startTime, playbackRate, hideUI } = this.props;
 
     return (
       <RNSpallaPlayer
@@ -120,6 +121,7 @@ class SpallaPlayer extends React.Component<Props> {
         style={style}
         startTime={startTime ?? 0}
         playbackRate={playbackRate ?? 1.0}
+        hideUI={hideUI ?? false}
       >
         {this.props.children}
       </RNSpallaPlayer>
