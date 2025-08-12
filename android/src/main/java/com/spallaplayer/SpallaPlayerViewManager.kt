@@ -28,6 +28,7 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
   private var subtitle: String? = null
   private var loadTimer: Timer? = null
   private var playbackRate: Double = 1.0
+  private var hideUI: Boolean? = null
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -94,9 +95,15 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
     }
   }
 
+  @ReactProp(name = "hideUI")
+  fun setPlaybackRate(view: SpallaPlayerView, hideUI: Boolean) {
+    this.hideUI = hideUI
+    checkAndLoadPlayer(view)
+  }
+
   private fun checkAndLoadPlayer(view: SpallaPlayerView) {
-    if (contentId != null && startTime != null) {
-        view.load(contentId!!, false, true, startTime!!)
+    if (contentId != null && startTime != null && hideUI != null) {
+        view.load(contentId!!, true, startTime!!, subtitle, hideUI!!)
     }
   }
 
@@ -111,7 +118,7 @@ class RNSpallaPlayerManager() : SimpleViewManager<SpallaPlayerView>(), SpallaPla
           loadTimer?.cancel()
           loadTimer = null
           // Call view.load with the required properties
-          view.load(contentId!!, false, true, startTime!!, subtitle)
+          view.load(contentId!!, true,startTime!!, subtitle = subtitle, hideUI!!)
       }
     }, 300) // Delay of 200ms to allow all properties to be set
   }
