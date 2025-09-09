@@ -1333,7 +1333,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-safe-area-context (5.4.1):
+  - react-native-safe-area-context (5.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1348,8 +1348,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.4.1)
-    - react-native-safe-area-context/fabric (= 5.4.1)
+    - react-native-safe-area-context/common (= 5.6.0)
+    - react-native-safe-area-context/fabric (= 5.6.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1359,7 +1359,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.4.1):
+  - react-native-safe-area-context/common (5.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1383,7 +1383,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.4.1):
+  - react-native-safe-area-context/fabric (5.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1408,7 +1408,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-spalla-player (0.11.1):
+  - react-native-spalla-player (0.12.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1431,7 +1431,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - SpallaSDK (~> 2.2.0)
+    - SpallaSDK (~> 2.2.1)
     - Yoga
   - React-NativeModulesApple (0.79.2):
     - glog
@@ -1807,14 +1807,14 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.1)
-  - SpallaSDK (2.2.0):
+  - SpallaSDK (2.2.1):
     - THEOplayer-Integration-GoogleCast
     - THEOplayerSDK-core (~> 9.8.2)
-  - THEOplayer-Integration-GoogleCast (9.9.0):
-    - THEOplayer-Integration-GoogleCast/Base (= 9.9.0)
-    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.9.0)
-  - THEOplayer-Integration-GoogleCast/Base (9.9.0)
-  - THEOplayer-Integration-GoogleCast/Dependencies (9.9.0):
+  - THEOplayer-Integration-GoogleCast (9.11.0):
+    - THEOplayer-Integration-GoogleCast/Base (= 9.11.0)
+    - THEOplayer-Integration-GoogleCast/Dependencies (= 9.11.0)
+  - THEOplayer-Integration-GoogleCast/Base (9.11.0)
+  - THEOplayer-Integration-GoogleCast/Dependencies (9.11.0):
     - google-cast-sdk-dynamic-xcframework (~> 4.8)
   - THEOplayerSDK-core (9.8.2)
   - Yoga (0.0.0)
@@ -2093,8 +2093,8 @@ SPEC CHECKSUMS:
   React-logger: 368570a253f00879a1e4fea24ed4047e72e7bbf3
   React-Mapbuffer: c04fcda1c6281fc0a6824c7dcc1633dd217ac1ec
   React-microtasksnativemodule: ca2804a25fdcefffa0aa942aa23ab53b99614a34
-  react-native-safe-area-context: dc279397abf103b0577f48c548630b7e639646a7
-  react-native-spalla-player: 301eb99dd0ccc189e656cd70fb4620047e0686a2
+  react-native-safe-area-context: 6863f9e225b541b481514b0f6d51be0867184c2c
+  react-native-spalla-player: 75d98d2c1f1c617c0c3375f66a001e5c7b698028
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 6fd2f6811533e9c19a61e855c3033eecbf4ad2a0
@@ -2128,8 +2128,8 @@ SPEC CHECKSUMS:
   ReactCommon: 4d0da92a5eb8da86c08e3ec34bd23ab439fb2461
   RNScreens: c2e3cc506212228c607b4785b315205e28acbf0f
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  SpallaSDK: 052cf38782ec2f0340d07b89afa3a89f36c5eb8d
-  THEOplayer-Integration-GoogleCast: d04d5dcca8433e158a18c150cad722f907a6cf7c
+  SpallaSDK: e15d21df6ce0b8df5bfe512f5420cbc1ce29289d
+  THEOplayer-Integration-GoogleCast: 4a258f6af0a3c3765f0e1879a986a4874c4f6572
   THEOplayerSDK-core: 8b59b35b68b0cec52d10a22db2d9bc8e75f516a7
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
 

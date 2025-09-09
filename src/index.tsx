@@ -62,7 +62,9 @@ interface PlayerEvent {
     | 'muted'
     | 'unmuted'
     | 'buffering'
-    | 'playing';
+    | 'playing'
+    | 'onEnterFullScreen'
+    | 'onExitFullScreen';
 }
 
 interface Props {

@@ -173,6 +173,10 @@ extension SpallaPlayerWrapper: SpallaPlayerListener {
       onPlayerEvent(["event": "metadataLoaded", "isLive": metadata.isLive, "duration": metadata.duration])
     case .playbackRateChanged(let rate):
       onPlayerEvent(["event": "playbackRateSelected", "rate": rate])
+    case .enterFullScreen:
+      onPlayerEvent(["event": "enterFullscreen"])
+    case .exitFullScreen:
+      onPlayerEvent(["event": "exitFullscreen"])
     @unknown default:
       break
     }

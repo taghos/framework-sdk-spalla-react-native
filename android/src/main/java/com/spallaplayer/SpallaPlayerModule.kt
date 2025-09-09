@@ -43,8 +43,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
       val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
       if (uiManager is UIManager) {
         uiManager.resolveView(tag)?.let { view ->
-          if (view is SpallaPlayerView) {
-            view.play()
+          if (view is SpallaPlayerContainerView) {
+            view.spallaPlayerView.play()
           } else {
             throw ClassCastException(
               "Cannot play: view with tag #$tag is not a SpallaPlayerView"
@@ -57,8 +57,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
         _reactContext.getNativeModule(UIManagerModule::class.java)
       uiManager?.prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.play()
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.play()
         } else {
           throw ClassCastException(
             String.format(
@@ -77,8 +77,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
       val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
       if (uiManager is UIManager) {
         uiManager.resolveView(tag)?.let { view ->
-          if (view is SpallaPlayerView) {
-            view.pause()
+          if (view is SpallaPlayerContainerView) {
+            view.spallaPlayerView.pause()
           } else {
             throw ClassCastException(
               "Cannot pause: view with tag #$tag is not a SpallaPlayerView"
@@ -91,8 +91,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
         _reactContext.getNativeModule(UIManagerModule::class.java)
       uiManager?.prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.pause()
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.pause()
         } else {
           throw ClassCastException(
             String.format(
@@ -112,8 +112,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
     _reactContext.getNativeModule(UIManagerModule::class.java)!!
       .prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.seekTo(time)
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.seekTo(time)
         } else {
           throw ClassCastException(
             String.format(
@@ -130,8 +130,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
     _reactContext.getNativeModule(UIManagerModule::class.java)!!
       .prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.selectSubtitle(subtitle)
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.selectSubtitle(subtitle)
         } else {
           throw ClassCastException(
             String.format(
@@ -148,8 +148,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
     _reactContext.getNativeModule(UIManagerModule::class.java)!!
       .prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.selectPlaybackRate(rate)
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.selectPlaybackRate(rate)
         } else {
           throw ClassCastException(
             String.format(
@@ -167,8 +167,8 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
       val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
       if (uiManager is UIManager) {
         uiManager.resolveView(tag)?.let { view ->
-          if (view is SpallaPlayerView) {
-            view.pause()
+          if (view is SpallaPlayerContainerView) {
+            view.spallaPlayerView.pause()
           }
         }
       }
@@ -177,9 +177,9 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
         _reactContext.getNativeModule(UIManagerModule::class.java)
       uiManager?.prependUIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
         val playerView = nativeViewHierarchyManager.resolveView(tag)
-        if (playerView is SpallaPlayerView) {
-          playerView.pause()
-        } 
+        if (playerView is SpallaPlayerContainerView) {
+          playerView.spallaPlayerView.pause()
+        }
       }
     }
   }

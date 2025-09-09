@@ -1,14 +1,6 @@
 import React from 'react';
-import { Button, StyleSheet, View, SafeAreaView } from 'react-native';
-import SpallaPlayer, {
-  initialize,
-  SpallaCastButton,
-} from 'react-native-spalla-player';
-
-initialize(
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzA1MGFmMzVhMmMxMDJhMmM0OWJmY2MiLCJyb2xlIjoiNjA1YTBjZWQyN2YyOWUyYTM2ODM3MTg3IiwiYXZhdGFyIjoicGxhY2Vob2xkZXItdXNlci5wbmciLCJjbGllbnRlIjoiNjAzN2U5NjNkZTg3YTdlNWI5NDEyMDQ5Iiwic2Vzc2FvX2lkIjoiMnhnYnNoNzM0cHllR29wNHBaY0FoTDRLaXdIIiwibmJmIjoxNzQ4MzYyODcxLCJpYXQiOjE3NDgzNjI4NzEsImV4cCI6MTc1MDk1NDg3MSwiaXNzIjoiU3BhbGxhIiwibmJmIjoxNzQ4MzYyODcxLCJpYXQiOjE3NDgzNjI4NzEsImV4cCI6MTc1MDk1NDg3MSwiaXNzIjoiU3BhbGxhIn0.a3mjFiEdgZ03VquurZOpVz4_EQ-WL9Sp0yfF7KLubeA',
-  'Chromecast app id or null'
-);
+import { Button, StyleSheet, View, SafeAreaView, Text } from 'react-native';
+import SpallaPlayer, { SpallaCastButton } from 'react-native-spalla-player';
 
 export default function ContentView() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
@@ -19,72 +11,78 @@ export default function ContentView() {
   const [playbackRate, setPlaybackRate] = React.useState<
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
+  const [time, setTime] = React.useState(0);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <SpallaCastButton tintColor="white" />
       </View>
-      <SpallaPlayer
-        ref={playerRef}
-        style={styles.videoPlayer}
-        contentId="some spalla content id here"
-        muted={muted}
-        hideUI={false}
-        startTime={50}
-        subtitle={subtitle}
-        playbackRate={playbackRate}
-        onPlayerEvent={({ nativeEvent }) => {
-          switch (nativeEvent.event) {
-            case 'timeUpdate':
-              console.log('timeupdate', nativeEvent.time);
-              break;
-            case 'durationUpdate':
-              console.log('durationUpdate', nativeEvent.duration);
-              break;
-            case 'play':
-            case 'playing':
-              setPlaying(true);
-              break;
-            case 'pause':
-              setPlaying(false);
-              break;
-            case 'muted':
-              setMuted(true);
-              break;
-            case 'unmuted':
-              setMuted(false);
-              break;
-            case 'subtitleSelected':
-              console.log('subtitleSelected', nativeEvent.subtitle);
-              setSubtitle(nativeEvent.subtitle);
-              break;
-            case 'subtitlesAvailable':
-              console.log('subtitlesAvailable', nativeEvent.subtitles);
-              break;
-            case 'playbackRateSelected':
-              console.log('playbackRateSelected', nativeEvent.rate);
-              setPlaybackRate(nativeEvent.rate);
-              break;
-            case 'metadataLoaded':
-              console.log(
-                'metadataLoaded',
-                nativeEvent.isLive,
-                nativeEvent.duration
-              );
-              break;
-            default:
-              console.log('event', nativeEvent.event);
-          }
-          /*if (nativeEvent.event === 'timeUpdate') {
-            console.log('timeupdate', nativeEvent.time);
-          } else {
-            console.log('event', nativeEvent.event);
-          }*/
-        }}
-      >
-        <View style={styles.uicontainer}>{/* Custom UI */}</View>
-      </SpallaPlayer>
+      <View style={styles.videoPlayer}>
+        <SpallaPlayer
+          ref={playerRef}
+          style={styles.videoPlayer}
+          contentId="{spalla content id}"
+          muted={muted}
+          hideUI={true}
+          startTime={50}
+          subtitle={subtitle}
+          playbackRate={playbackRate}
+          onPlayerEvent={({ nativeEvent }) => {
+            console.log('Native event received', nativeEvent.event);
+            switch (nativeEvent.event) {
+              case 'timeUpdate':
+                console.log('timeupdate', nativeEvent.time);
+                setTime(nativeEvent.time);
+                break;
+              case 'durationUpdate':
+                console.log('durationUpdate', nativeEvent.duration);
+                break;
+              case 'play':
+              case 'playing':
+                setPlaying(true);
+                break;
+              case 'pause':
+                setPlaying(false);
+                break;
+              case 'muted':
+                setMuted(true);
+                break;
+              case 'unmuted':
+                setMuted(false);
+                break;
+              case 'subtitleSelected':
+                console.log('subtitleSelected', nativeEvent.subtitle);
+                setSubtitle(nativeEvent.subtitle);
+                break;
+              case 'subtitlesAvailable':
+                console.log('subtitlesAvailable', nativeEvent.subtitles);
+                break;
+              case 'playbackRateSelected':
+                console.log('playbackRateSelected', nativeEvent.rate);
+                setPlaybackRate(nativeEvent.rate);
+                break;
+              case 'metadataLoaded':
+                console.log(
+                  'metadataLoaded',
+                  nativeEvent.isLive,
+                  nativeEvent.duration
+                );
+                break;
+              case 'onEnterFullScreen':
+                console.log('onEnterFullScreen');
+                break;
+              case 'onExitFullScreen':
+                console.log('onExitFullScreen');
+                break;
+
+              default:
+                console.log('event', nativeEvent.event);
+            }
+          }}
+        />
+        <TestUI playing={playing} playerRef={playerRef} time={time} />
+      </View>
       <View style={styles.hstack}>
         <Button
           onPress={() => {
@@ -120,6 +118,39 @@ export default function ContentView() {
   );
 }
 
+type TestUIProps = {
+  playing: boolean;
+  time: number;
+  playerRef: React.RefObject<SpallaPlayer>;
+};
+
+const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
+  return (
+    <View style={styles.uicontainer}>
+      <Button
+        onPress={() => {
+          if (playing) {
+            playerRef.current?.pause();
+          } else {
+            playerRef.current?.play();
+          }
+        }}
+        title={playing ? 'Pause' : 'Play'}
+      />
+      <Text
+        style={{
+          color: 'green',
+          backgroundColor: 'yellow',
+          width: 100,
+          height: 30,
+        }}
+      >
+        {time}
+      </Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -133,7 +164,11 @@ const styles = StyleSheet.create({
   },
   uicontainer: {
     flexDirection: 'column',
-    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   videoPlayer: {
     flex: 1,
