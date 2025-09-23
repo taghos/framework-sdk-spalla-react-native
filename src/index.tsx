@@ -140,6 +140,11 @@ class SpallaPlayer extends React.Component<Props> {
     RNSpallaPlayerModule.pause(handle);
   };
 
+  seekTo = (time: number) => {
+    const handle = findNodeHandle(this._player);
+    RNSpallaPlayerModule.seekTo(handle, time);
+  };
+
   componentWillUnmount() {
     const handle = findNodeHandle(this._player);
     RNSpallaPlayerModule.unmount(handle);
