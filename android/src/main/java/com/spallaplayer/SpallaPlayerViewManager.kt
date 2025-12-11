@@ -4,11 +4,7 @@ import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
-import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableNativeArray
-import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -48,15 +44,15 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   }
 
   override fun getExportedCustomBubblingEventTypeConstants(): MutableMap<String, Any> {
-    return MapBuilder.builder<String, Any>()
-      .put(
-        "onPlayerEvent",
-        MapBuilder.of(
-          "phasedRegistrationNames",
-          MapBuilder.of("bubbled", "onPlayerEvent")
-        )
+    val eventMap = mutableMapOf<String, Any>()
+
+    eventMap["onPlayerEvent"] = mapOf(
+      "phasedRegistrationNames" to mapOf(
+        "bubbled" to "onPlayerEvent"
       )
-      .build()
+    )
+
+    return eventMap
   }
 
   override fun onDropViewInstance(view: SpallaPlayerContainerView) {
