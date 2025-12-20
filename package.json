@@ -111,19 +111,11 @@
     ]
   },
   "codegenConfig": {
-    "name": "SpallaPlayerViewSpec",
-    "type": "all",
+    "name": "SpallaPlayerView",
+    "type": "components",
     "jsSrcsDir": "src",
     "android": {
       "javaPackageName": "com.spallaplayer"
-    },
-    "ios": {
-      "componentProvider": {
-        "SpallaPlayerView": "SpallaPlayerView"
-      },
-      "modulesProvider": {
-        "SpallaPlayerModule": "SpallaPlayerModule"
-      }
     }
   },
   "prettier": {
