@@ -1,15 +1,21 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { StyleSheet, Text, Button } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { initialize } from 'react-native-spalla-player';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button, SafeAreaView, Text } from 'react-native';
 import ContentView from './ContentView';
 
 const Stack = createNativeStackNavigator();
 
-initialize('your spalla token here', 'Chromecast app id or null');
-
 export default function App() {
+  useEffect(() => {
+    initialize(
+      'Your spalla api key here', // Replace with your Spalla API key
+      null // Optionally, provide an application id
+    );
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -26,12 +32,8 @@ export default function App() {
 
 const HomeScreen = ({ navigation }: any) => {
   return (
-    <SafeAreaView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <Text style={{ fontSize: 24, marginBottom: 20, color: 'red' }}>
-        Welcome to Spalla Player Example
-      </Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.text}>Welcome to Spalla Player Example</Text>
       <Button
         title="Play"
         onPress={() => {
@@ -41,3 +43,21 @@ const HomeScreen = ({ navigation }: any) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: 'red',
+  },
+  box: {
+    width: 60,
+    height: 60,
+    marginVertical: 20,
+  },
+});

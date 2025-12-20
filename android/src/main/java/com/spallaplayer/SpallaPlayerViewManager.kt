@@ -1,5 +1,3 @@
-package com.spallaplayer
-
 import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.Arguments
@@ -14,14 +12,16 @@ import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.*
 import com.spalla.sdk.android.core.player.listeners.SpallaPlayerFullScreenListener
 import com.spalla.sdk.android.core.player.listeners.SpallaPlayerListener
 import com.spalla.sdk.android.core.player.view.SpallaPlayerView
+
+
 import java.util.Timer
 import java.util.TimerTask
 
-class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
+class SpallaPlayerViewManager() : ViewGroupManager<SpallaPlayerView>(),
   SpallaPlayerListener, SpallaPlayerFullScreenListener {
   private var _playerView: SpallaPlayerView? = null
   private var _reactContext: ReactContext? = null
-  private var _container: SpallaPlayerContainerView? = null
+  //private var _container: SpallaPlayerContainerView? = null
 
   private var contentId: String? = null
   private var startTime: Double? = null
@@ -32,15 +32,13 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
   override fun getName() = "RNSpallaPlayer"
 
-  override fun createViewInstance(context: ThemedReactContext): SpallaPlayerContainerView {
+  override fun createViewInstance(context: ThemedReactContext): SpallaPlayerView {
     _reactContext = context
-    val container = SpallaPlayerContainerView(context)
-    _playerView = container.spallaPlayerView
+    val player = SpallaPlayerView(context)
+    _playerView = player
     _playerView?.registerPlayerListener(this)
     _playerView?.registerFullScreenListener(this)
-    this._container = container
-
-    return container
+    return player
   }
 
   override fun getExportedCustomBubblingEventTypeConstants(): MutableMap<String, Any> {
@@ -55,58 +53,58 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     return eventMap
   }
 
-  override fun onDropViewInstance(view: SpallaPlayerContainerView) {
+  override fun onDropViewInstance(view: SpallaPlayerView) {
     Log.v("RNSpallaPlayerManager", "onDropViewInstance")
 
     try {
-      view.spallaPlayerView.onDestroy()
+      view.onDestroy()
     } catch (e: Exception) {
       e.printStackTrace()
     }
     super.onDropViewInstance(view)
   }
 
-  override fun addView(parent: SpallaPlayerContainerView, child: View, index: Int) {
+  override fun addView(parent: SpallaPlayerView, child: View, index: Int) {
     parent.addView(child, index)
   }
 
-  override fun removeViewAt(parent: SpallaPlayerContainerView, index: Int) {
+  override fun removeViewAt(parent: SpallaPlayerView, index: Int) {
     parent.removeViewAt(index)
   }
 
-  override fun getChildCount(parent: SpallaPlayerContainerView): Int {
+  override fun getChildCount(parent: SpallaPlayerView): Int {
     return parent.childCount
   }
 
-  override fun getChildAt(parent: SpallaPlayerContainerView, index: Int): View {
+  override fun getChildAt(parent: SpallaPlayerView, index: Int): View {
     return parent.getChildAt(index)
   }
 
   @ReactProp(name = "contentId")
-  fun setContentId(view: SpallaPlayerContainerView, contentId: String) {
+  fun setContentId(view: SpallaPlayerView, contentId: String) {
     this.contentId = contentId
     checkAndLoadPlayer(view)
   }
 
   @ReactProp(name = "muted")
-  fun setMuted(view: SpallaPlayerContainerView, muted: Boolean) {
+  fun setMuted(view: SpallaPlayerView, muted: Boolean) {
     _playerView?.setMuted(muted)
   }
 
   @ReactProp(name = "startTime")
-  fun setStartTime(view: SpallaPlayerContainerView, startTime: Double) {
+  fun setStartTime(view: SpallaPlayerView, startTime: Double) {
     this.startTime = startTime
     //checkAndLoadPlayer(view)
   }
 
   @ReactProp(name = "subtitle")
-  fun setSubtitle(view: SpallaPlayerContainerView, subtitle: String?) {
+  fun setSubtitle(view: SpallaPlayerView, subtitle: String?) {
     this.subtitle = subtitle
     _playerView?.selectSubtitle(subtitle)
   }
 
   @ReactProp(name = "playbackRate")
-  fun setPlaybackRate(view: SpallaPlayerContainerView, playbackRate: Double) {
+  fun setPlaybackRate(view: SpallaPlayerView, playbackRate: Double) {
     if (playbackRate > 0) {
       this.playbackRate = playbackRate
       _playerView?.selectPlaybackRate(playbackRate)
@@ -114,14 +112,14 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   }
 
   @ReactProp(name = "hideUI")
-  fun setPlaybackRate(view: SpallaPlayerContainerView, hideUI: Boolean) {
+  fun setHideUI(view: SpallaPlayerView, hideUI: Boolean) {
     this.hideUI = hideUI
     checkAndLoadPlayer(view)
   }
 
-  private fun checkAndLoadPlayer(view: SpallaPlayerContainerView) {
+  private fun checkAndLoadPlayer(view: SpallaPlayerView) {
     if (contentId != null && startTime != null && hideUI != null) {
-      view.spallaPlayerView.load(contentId!!, true, startTime!!, subtitle, hideUI!!)
+      view.load(contentId!!, true, startTime!!, subtitle, hideUI!!)
     }
   }
 
@@ -196,7 +194,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
       }
 
     }
-    _container?.let { container ->
+    _playerView?.let { container ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
         container.id,
         "onPlayerEvent",
@@ -209,7 +207,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     Log.v("SpallaPlayerViewManager", "onEnterFullScreen")
     val map: WritableMap = Arguments.createMap()
     map.putString("event", "enterFullScreen")
-    _container?.let { container ->
+    _playerView?.let { container ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
         container.id,
         "onPlayerEvent",
@@ -221,7 +219,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   override fun onExitFullScreen() {
     val map: WritableMap = Arguments.createMap()
     map.putString("event", "exitFullScreen")
-    _container?.let { container ->
+    _playerView?.let { container ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
         container.id,
         "onPlayerEvent",

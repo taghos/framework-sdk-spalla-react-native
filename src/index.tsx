@@ -1,28 +1,22 @@
 import React from 'react';
-import {
-  requireNativeComponent,
-  type ViewStyle,
-  NativeModules,
-  findNodeHandle,
-} from 'react-native';
+import { type ViewStyle } from 'react-native';
+import { Commands } from './SpallaPlayerViewNativeComponent';
+
+// Import the appropriate component based on architecture
+const isFabricEnabled = (global as any)?.nativeFabricUIManager != null;
+
+const RNSpallaPlayer = isFabricEnabled
+  ? require('./SpallaPlayerViewNativeComponent').default
+  : require('react-native').requireNativeComponent('RNSpallaPlayer');
+
+// Import the appropriate module
+const RNSpallaPlayerModule = isFabricEnabled
+  ? require('./NativeSpallaPlayerModule').default
+  : require('react-native').NativeModules.RNSpallaPlayer;
 
 type allowedPlaybackRates = 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
 
-interface RNSpallaPlayerProps {
-  children?: React.ReactNode;
-  style?: ViewStyle;
-  startTime: number;
-  subtitle?: String | null;
-  playbackRate?: allowedPlaybackRates;
-  hideUI?: boolean;
-  ref?: (ref: any) => void;
-}
-
-const RNSpallaPlayer =
-  requireNativeComponent<RNSpallaPlayerProps>('RNSpallaPlayer');
-
-const RNSpallaPlayerModule = NativeModules.RNSpallaPlayer;
-
+// Event interfaces (keep these as they are)
 interface PlayerEventTimeUpdate {
   event: 'timeUpdate';
   time: number;
@@ -76,11 +70,11 @@ interface Props {
   autoplay?: boolean;
   startTime?: number;
   subtitle?: String | null;
-  playbackRate?: 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
+  playbackRate?: allowedPlaybackRates;
   onPlayerEvent?: (event: {
     nativeEvent:
-      | PlayerEventTimeUpdate
       | PlayerEvent
+      | PlayerEventTimeUpdate
       | PlayerEventDurationUpdate
       | PlayerEventSubtitlesAvailable
       | PlayerEventSubtitleSelected
@@ -89,71 +83,66 @@ interface Props {
   }) => void;
 }
 
-export const play = (ref: any) => {
-  const handle = findNodeHandle(ref);
-  RNSpallaPlayerModule.play(handle);
-};
-
-export const pause = (ref: any) => {
-  const handle = findNodeHandle(ref);
-  RNSpallaPlayerModule.pause(handle);
-};
-
-export const seekTo = (ref: any, time: number) => {
-  const handle = findNodeHandle(ref);
-  RNSpallaPlayerModule.seekTo(handle, time);
-};
-
-//export default SpallaPlayer;
-
-class SpallaPlayer extends React.Component<Props> {
-  _player = null;
-
-  _setRef = (ref: any) => {
-    this._player = ref;
-  };
-
-  render() {
-    const { style, startTime, playbackRate, hideUI } = this.props;
-
-    return (
-      <RNSpallaPlayer
-        {...this.props}
-        ref={this._setRef}
-        style={style}
-        startTime={startTime ?? 0}
-        playbackRate={playbackRate ?? 1.0}
-        hideUI={hideUI ?? false}
-      >
-        {this.props.children}
-      </RNSpallaPlayer>
-    );
-  }
-
-  play = () => {
-    const handle = findNodeHandle(this._player);
-    RNSpallaPlayerModule.play(handle);
-  };
-
-  pause = () => {
-    const handle = findNodeHandle(this._player);
-    RNSpallaPlayerModule.pause(handle);
-  };
-
-  seekTo = (time: number) => {
-    const handle = findNodeHandle(this._player);
-    RNSpallaPlayerModule.seekTo(handle, time);
-  };
-
-  componentWillUnmount() {
-    const handle = findNodeHandle(this._player);
-    RNSpallaPlayerModule.unmount(handle);
-  }
-}
-
-export const initialize = (token: String, applicationId: String | null) => {
+export const initialize = (token: string, applicationId: string | null) => {
   RNSpallaPlayerModule.initialize(token, applicationId);
 };
+
+export interface SpallaPlayerRef {
+  play(): void;
+  pause(): void;
+  seekTo(time: number): void;
+}
+
+const SpallaPlayer = React.forwardRef<SpallaPlayerRef, Props>((props, ref) => {
+  const playerRef = React.useRef(null);
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      play: () => {
+        if (playerRef.current) {
+          Commands.play(playerRef.current);
+        }
+      },
+      pause: () => {
+        console.log('Calling pause command');
+        if (playerRef.current) {
+          Commands.pause(playerRef.current);
+        }
+      },
+      seekTo: (time: number) => {
+        if (playerRef.current) {
+          Commands.seekTo(playerRef.current, time);
+        }
+      },
+    }),
+    []
+  );
+
+  React.useEffect(() => {
+    const currentRef = playerRef.current;
+    return () => {
+      if (currentRef) {
+        Commands.unmount(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <RNSpallaPlayer
+      {...props}
+      ref={playerRef}
+      style={props.style}
+      startTime={props.startTime ?? 0}
+      playbackRate={props.playbackRate ?? 1.0}
+      hideUI={props.hideUI ?? false}
+    >
+      {props.children}
+    </RNSpallaPlayer>
+  );
+});
+
+SpallaPlayer.displayName = 'SpallaPlayer';
 
 export default SpallaPlayer;
 export { default as SpallaCastButton } from './components/CastButton';

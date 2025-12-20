@@ -13,53 +13,50 @@ import SpallaSDK
   
   let viewController: SpallaPlayerViewController
   
-  @objc public var contentId: String? {
+  @objc var contentId: String? {
     didSet {
       print("Content id: \(contentId ?? "nil")")
       // hacky! this needs to be delayed a bit so hideUI and startTime can be set first when comming from RN
-      // should replace with an object so all props are set at once
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
         self.setupPlayer()
       }
     }
   }
   
-  
-  @objc public var muted: Bool = false {
+  @objc var muted: Bool = false {
     didSet {
       print("Mute called \(muted)")
       updateMutedState()
     }
   }
   
-  @objc public var hideUI: Bool = false {
+  @objc var hideUI: Bool = false {
     didSet {
       print("Hide UI set to \(hideUI)")
     }
   }
   
   
-  @objc public var startTime: NSNumber = 0.0 {
+  @objc var startTime: NSNumber = 10 {
     didSet {
       print("Start time set \(startTime)")
     }
   }
   
-  @objc public var subtitle: String? = nil {
+  @objc var subtitle: String? = nil {
     didSet {
       print("Subtitle set \(subtitle ?? "nil")")
       viewController.selectSubtitle(subtitle: subtitle)
     }
   }
 
-  @objc public var playbackRate: NSNumber = 1.0 {
+  @objc var playbackRate: NSNumber = 1.0 {
     didSet {
       viewController.setPlaybackRate(rate: playbackRate.doubleValue)
     }
   }
   
-  @objc public var onPlayerEvent: (([String: Any]) -> Void)?
-  
+  @objc var onPlayerEvent: (([String: Any]) -> Void)? //RCTBubblingEventBlock?
   
   convenience public init() {
     self.init(frame: CGRect.zero)
@@ -132,9 +129,8 @@ import SpallaSDK
   }
 
   @objc public func unmount() {
-    print("Unmount called")
     viewController.pause()
-    //viewController.removeFromParent()
+    viewController.removeFromParent()
   }
   
   deinit {

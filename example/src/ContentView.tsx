@@ -1,9 +1,13 @@
 import React from 'react';
-import { Button, StyleSheet, View, SafeAreaView, Text } from 'react-native';
-import SpallaPlayer, { SpallaCastButton } from 'react-native-spalla-player';
+import { Button, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SpallaPlayer, {
+  SpallaCastButton,
+  type SpallaPlayerRef,
+} from 'react-native-spalla-player';
 
 export default function ContentView() {
-  const playerRef = React.useRef<SpallaPlayer | null>(null);
+  const playerRef = React.useRef<SpallaPlayerRef | null>(null);
 
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
@@ -11,7 +15,7 @@ export default function ContentView() {
   const [playbackRate, setPlaybackRate] = React.useState<
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
-  const [time, setTime] = React.useState(0);
+  //const [time, setTime] = React.useState(0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,8 +28,8 @@ export default function ContentView() {
           style={styles.videoPlayer}
           contentId="{spalla content id}"
           muted={muted}
-          hideUI={true}
-          startTime={50}
+          hideUI={false}
+          startTime={0}
           subtitle={subtitle}
           playbackRate={playbackRate}
           onPlayerEvent={({ nativeEvent }) => {
@@ -33,7 +37,9 @@ export default function ContentView() {
             switch (nativeEvent.event) {
               case 'timeUpdate':
                 console.log('timeupdate', nativeEvent.time);
-                setTime(nativeEvent.time);
+                if (typeof nativeEvent.time === 'number') {
+                  //setTime(nativeEvent.time);
+                }
                 break;
               case 'durationUpdate':
                 console.log('durationUpdate', nativeEvent.duration);
@@ -45,22 +51,22 @@ export default function ContentView() {
               case 'pause':
                 setPlaying(false);
                 break;
-              case 'muted':
-                setMuted(true);
-                break;
-              case 'unmuted':
-                setMuted(false);
-                break;
               case 'subtitleSelected':
                 console.log('subtitleSelected', nativeEvent.subtitle);
-                setSubtitle(nativeEvent.subtitle);
+                if (nativeEvent.subtitle !== undefined) {
+                  setSubtitle(nativeEvent.subtitle);
+                }
                 break;
               case 'subtitlesAvailable':
                 console.log('subtitlesAvailable', nativeEvent.subtitles);
                 break;
               case 'playbackRateSelected':
                 console.log('playbackRateSelected', nativeEvent.rate);
-                setPlaybackRate(nativeEvent.rate);
+                if (typeof nativeEvent.rate === 'number') {
+                  setPlaybackRate(
+                    nativeEvent.rate as 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
+                  );
+                }
                 break;
               case 'metadataLoaded':
                 console.log(
@@ -81,11 +87,12 @@ export default function ContentView() {
             }
           }}
         />
-        <TestUI playing={playing} playerRef={playerRef} time={time} />
+        {/* <TestUI playing={playing} playerRef={playerRef} time={time} /> */}
       </View>
       <View style={styles.hstack}>
         <Button
           onPress={() => {
+            console.log('Toggling play/pause. Currently playing: ', playing);
             if (playing) {
               playerRef.current?.pause();
             } else {
@@ -118,13 +125,14 @@ export default function ContentView() {
   );
 }
 
-type TestUIProps = {
+/*type TestUIProps = {
   playing: boolean;
   time: number;
   playerRef: React.RefObject<SpallaPlayer>;
-};
+};*/
 
-const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/*const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
   return (
     <View style={styles.uicontainer}>
       <Button
@@ -149,7 +157,7 @@ const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
       </Text>
     </View>
   );
-};
+};*/
 
 const styles = StyleSheet.create({
   container: {
@@ -174,6 +182,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
     width: '100%',
+    height: '400',
   },
   header: {
     flexDirection: 'row',

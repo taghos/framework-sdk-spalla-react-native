@@ -77,7 +77,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "spallaplayer.example"
+    namespace "spallaplayerexample"
     defaultConfig {
         applicationId "spallaplayer.example"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -116,12 +116,4 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-}
-
-allprojects {
-  repositories {
-    google()
-    mavenCentral()
-    maven { url 'https://maven.theoplayer.com/releases' }
-  }
 }
