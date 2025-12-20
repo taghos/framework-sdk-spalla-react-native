@@ -1,24 +1,40 @@
 package com.spallaplayer
 
-import com.facebook.react.ReactPackage
+import com.facebook.react.BaseReactPackage
+import com.facebook.react.bridge.ModuleSpec
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.uimanager.ViewManager
+import com.facebook.react.module.model.ReactModuleInfo
+import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.spallaplayer.components.RNGoogleCastButtonManager
-import java.util.ArrayList
 
-class SpallaPlayerViewPackage : ReactPackage {
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    val viewManagers: MutableList<ViewManager<*, *>> = ArrayList()
-    viewManagers.add(SpallaPlayerViewManager())
-    viewManagers.add(RNGoogleCastButtonManager())
-    return viewManagers
-  }
+class SpallaPlayerViewPackage : BaseReactPackage() {
 
-  @Deprecated("Migrate to [BaseReactPackage] and implement [getModule] instead.")
-  override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return listOf(SpallaPlayerModule(reactContext))
-  }
+  override fun getViewManagers(
+    reactContext: ReactApplicationContext
+  ): List<ModuleSpec> =
+    listOf(
+      ModuleSpec.viewManagerSpec {
+        SpallaPlayerViewManager()
+      },
+      ModuleSpec.viewManagerSpec {
+        RNGoogleCastButtonManager()
+      }
+    )
+
+  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider =
+    ReactModuleInfoProvider {
+      mapOf(
+        SpallaPlayerModule.REACT_NAME to ReactModuleInfo(
+          SpallaPlayerModule.REACT_NAME,
+          className = SpallaPlayerModule::class.java.name,
+          canOverrideExistingModule = false,
+          needsEagerInit = false,
+          isCxxModule = false,
+          isTurboModule = false
+        )
+      )
+    }
 
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
     return when (name) {
