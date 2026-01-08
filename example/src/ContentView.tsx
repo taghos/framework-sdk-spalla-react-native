@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, View, SafeAreaView, Text } from 'react-native';
+import { Button, StyleSheet, View, SafeAreaView } from 'react-native';
 import SpallaPlayer, { SpallaCastButton } from 'react-native-spalla-player';
 
 export default function ContentView() {
@@ -11,7 +11,7 @@ export default function ContentView() {
   const [playbackRate, setPlaybackRate] = React.useState<
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
-  const [time, setTime] = React.useState(0);
+  const [_, setTime] = React.useState(0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,10 +22,10 @@ export default function ContentView() {
         <SpallaPlayer
           ref={playerRef}
           style={styles.videoPlayer}
-          contentId="{spalla content id}"
+          contentId={'spalla content id'}
           muted={muted}
-          hideUI={true}
-          startTime={50}
+          hideUI={false}
+          startTime={100}
           subtitle={subtitle}
           playbackRate={playbackRate}
           onPlayerEvent={({ nativeEvent }) => {
@@ -81,7 +81,7 @@ export default function ContentView() {
             }
           }}
         />
-        <TestUI playing={playing} playerRef={playerRef} time={time} />
+        {/* <TestUI playing={playing} playerRef={playerRef} time={time} /> */}
       </View>
       <View style={styles.hstack}>
         <Button
@@ -118,38 +118,38 @@ export default function ContentView() {
   );
 }
 
-type TestUIProps = {
-  playing: boolean;
-  time: number;
-  playerRef: React.RefObject<SpallaPlayer>;
-};
+// type TestUIProps = {
+//   playing: boolean;
+//   time: number;
+//   playerRef: React.RefObject<SpallaPlayer | null>;
+// };
 
-const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
-  return (
-    <View style={styles.uicontainer}>
-      <Button
-        onPress={() => {
-          if (playing) {
-            playerRef.current?.pause();
-          } else {
-            playerRef.current?.play();
-          }
-        }}
-        title={playing ? 'Pause' : 'Play'}
-      />
-      <Text
-        style={{
-          color: 'green',
-          backgroundColor: 'yellow',
-          width: 100,
-          height: 30,
-        }}
-      >
-        {time}
-      </Text>
-    </View>
-  );
-};
+// const TestUI = ({ playing, time, playerRef }: TestUIProps) => {
+//   return (
+//     <View style={styles.uicontainer}>
+//       <Button
+//         onPress={() => {
+//           if (playing) {
+//             playerRef.current?.pause();
+//           } else {
+//             playerRef.current?.play();
+//           }
+//         }}
+//         title={playing ? 'Pause' : 'Play'}
+//       />
+//       <Text
+//         style={{
+//           color: 'green',
+//           backgroundColor: 'yellow',
+//           width: 100,
+//           height: 30,
+//         }}
+//       >
+//         {time}
+//       </Text>
+//     </View>
+//   );
+// };
 
 const styles = StyleSheet.create({
   container: {
