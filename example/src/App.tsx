@@ -24,7 +24,13 @@ export default function App() {
           component={HomeScreen}
           options={{ title: 'Welcome' }}
         />
-        <Stack.Screen name="ContentView" component={ContentView} />
+        <Stack.Screen
+          name="ContentView"
+          component={ContentView}
+          options={{
+            headerShown: true,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

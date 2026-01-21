@@ -1,9 +1,12 @@
 import React from 'react';
-import { Button, StyleSheet, View, SafeAreaView } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import SpallaPlayer, { SpallaCastButton } from 'react-native-spalla-player';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ContentView() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
+  const navigation = useNavigation();
 
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
@@ -12,17 +15,26 @@ export default function ContentView() {
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
   const [_, setTime] = React.useState(0);
+  //needs to hide interface when in PiP mode
+  const [isInPiP, setIsInPiP] = React.useState(false);
+
+  // Hide/show navigation header based on PiP state
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerShown: !isInPiP,
+    });
+  }, [isInPiP, navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <View style={isInPiP ? styles.hidden : styles.header}>
         <SpallaCastButton tintColor="white" />
       </View>
       <View style={styles.videoPlayer}>
         <SpallaPlayer
           ref={playerRef}
           style={styles.videoPlayer}
-          contentId={'spalla content id'}
+          contentId="spalla content id"
           muted={muted}
           hideUI={false}
           startTime={100}
@@ -75,6 +87,12 @@ export default function ContentView() {
               case 'onExitFullScreen':
                 console.log('onExitFullScreen');
                 break;
+              case 'enterPiP':
+                setIsInPiP(true);
+                break;
+              case 'exitPiP':
+                setIsInPiP(false);
+                break;
 
               default:
                 console.log('event', nativeEvent.event);
@@ -83,7 +101,7 @@ export default function ContentView() {
         />
         {/* <TestUI playing={playing} playerRef={playerRef} time={time} /> */}
       </View>
-      <View style={styles.hstack}>
+      <View style={isInPiP ? styles.hidden : styles.hstack}>
         <Button
           onPress={() => {
             if (playing) {
@@ -99,7 +117,7 @@ export default function ContentView() {
           title={muted ? 'Unmute' : 'Mute'}
         />
       </View>
-      <View style={styles.hstack}>
+      <View style={isInPiP ? styles.hidden : styles.hstack}>
         <Button
           onPress={() => {
             setSubtitle(subtitle ? null : 'pt-br');
@@ -113,7 +131,7 @@ export default function ContentView() {
           title={playbackRate.toString() + 'x'}
         />
       </View>
-      <View style={styles.bottom} />
+      <View style={isInPiP ? styles.hidden : styles.bottom} />
     </SafeAreaView>
   );
 }
@@ -193,5 +211,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     marginBottom: 8,
+  },
+  hidden: {
+    display: 'none',
   },
 });

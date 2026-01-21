@@ -2,7 +2,12 @@ package com.spallaplayer
 
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ComponentActivity
+import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.util.Consumer
 import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.ViewGroupManager
@@ -18,7 +23,7 @@ import java.util.Timer
 import java.util.TimerTask
 
 class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
-    SpallaPlayerListener, SpallaPlayerFullScreenListener {
+    SpallaPlayerListener, SpallaPlayerFullScreenListener, LifecycleEventListener {
     private var _playerView: SpallaPlayerView? = null
     private var _reactContext: ReactContext? = null
     private var _container: SpallaPlayerContainerView? = null
@@ -29,19 +34,46 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     private var loadTimer: Timer? = null
     private var playbackRate: Double = 1.0
     private var hideUI: Boolean? = null
+    private var isPlaying: Boolean = false
 
     override fun getName() = "RNSpallaPlayer"
 
-    override fun createViewInstance(context: ThemedReactContext): SpallaPlayerContainerView {
-        _reactContext = context
-        val container = SpallaPlayerContainerView(context)
-        _playerView = container.spallaPlayerView
-        _playerView?.registerPlayerListener(this)
-        _playerView?.registerFullScreenListener(this)
-        this._container = container
+  private val pipModeListener = Consumer<PictureInPictureModeChangedInfo> { info ->
+    val map: WritableMap = Arguments.createMap()
+    map.putString("event", if (info.isInPictureInPictureMode) "enterPiP" else "exitPiP")
+    map.putBoolean("isInPictureInPictureMode", info.isInPictureInPictureMode)
 
-        return container
+    _container?.let { container ->
+      _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
+        container.id,
+        "onPlayerEvent",
+        map
+      )
     }
+    _reactContext?.currentActivity?.let { activity ->
+      _playerView?.onPictureInPictureModeChanged(activity, info.isInPictureInPictureMode)
+    }
+
+
+  }
+
+  override fun createViewInstance(context: ThemedReactContext): SpallaPlayerContainerView {
+    _reactContext = context
+    context.addLifecycleEventListener(this)
+
+    if(_reactContext?.currentActivity is AppCompatActivity) {
+      val activity = _reactContext?.currentActivity as? AppCompatActivity
+      activity?.addOnPictureInPictureModeChangedListener(pipModeListener)
+    }
+
+    val container = SpallaPlayerContainerView(context)
+    _playerView = container.spallaPlayerView
+    _playerView?.registerPlayerListener(this)
+    _playerView?.registerFullScreenListener(this)
+    this._container = container
+
+    return container
+  }
 
     override fun getExportedCustomBubblingEventTypeConstants(): MutableMap<String, Any> {
         val eventMap = mutableMapOf<String, Any>()
@@ -57,7 +89,9 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
     override fun onDropViewInstance(view: SpallaPlayerContainerView) {
         Log.v("RNSpallaPlayerManager", "onDropViewInstance")
-        view.post {
+      _reactContext?.removeLifecycleEventListener(this)
+
+      view.post {
             try {
                 loadTimer?.cancel()
                 view.spallaPlayerView.onDestroy()
@@ -138,7 +172,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     override fun onEvent(event: SpallaPlayerEvent) {
         val map: WritableMap = Arguments.createMap()
 
-        Log.v("RNSpallaPlayerManager", "onEvent: $event")
+        //Log.v("RNSpallaPlayerManager", "onEvent: $event")
         when (event) {
             is DurationUpdate -> {
                 map.putString("event", "durationUpdate")
@@ -146,15 +180,28 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
                 requestLayout()
             }
 
-            Ended -> map.putString("event", "ended")
+            Ended -> {
+              map.putString("event", "ended")
+              isPlaying = false
+            }
             is Error -> {
                 map.putString("event", "error")
                 map.putString("message", event.message)
+                isPlaying = false
             }
 
-            Pause -> map.putString("event", "pause")
-            Play -> map.putString("event", "play")
-            Playing -> map.putString("event", "playing")
+            Pause -> {
+              map.putString("event", "pause")
+              isPlaying = false
+            }
+            Play -> {
+              map.putString("event", "play")
+              isPlaying = false
+            }
+            Playing -> {
+              map.putString("event", "playing")
+              isPlaying = true
+            }
             is TimeUpdate -> {
                 map.putString("event", "timeUpdate")
                 map.putDouble("time", event.currentTime)
@@ -203,7 +250,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     }
 
     override fun onEnterFullScreen() {
-        Log.v("SpallaPlayerViewManager", "onEnterFullScreen")
+
         val map: WritableMap = Arguments.createMap()
         map.putString("event", "enterFullScreen")
         _container?.let { container ->
@@ -245,5 +292,25 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
             )
         }
     }
+
+  //lifecycle events
+  override fun onHostResume() {
+    _playerView?.let { player ->
+
+    }
+  }
+
+  override fun onHostPause() {
+    _playerView?.let { player ->
+      val activity = _reactContext?.currentActivity
+      if (activity != null && isPlaying) {
+        player.enterPictureInPictureMode(activity = activity)
+      }
+    }
+  }
+
+  override fun onHostDestroy() {
+    _reactContext?.removeLifecycleEventListener(this)
+  }
 
 }

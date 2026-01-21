@@ -64,7 +64,9 @@ interface PlayerEvent {
     | 'buffering'
     | 'playing'
     | 'onEnterFullScreen'
-    | 'onExitFullScreen';
+    | 'onExitFullScreen'
+    | 'enterPiP'
+    | 'exitPiP';
 }
 
 interface Props {
