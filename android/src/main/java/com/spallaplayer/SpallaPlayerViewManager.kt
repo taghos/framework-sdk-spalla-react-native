@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.ViewGroupManager
@@ -46,12 +45,15 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     // Reset the flag when PiP mode changes
     pipTriggered = false
 
-    _container?.let { container ->
-      _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
-        container.id,
-        "onPlayerEvent",
-        map
-      )
+    // we will only dispatch exits for now
+    if(!info.isInPictureInPictureMode) {
+      _container?.let { container ->
+        _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
+          container.id,
+          "onPlayerEvent",
+          map
+        )
+      }
     }
     _reactContext?.currentActivity?.let { activity ->
       _playerView?.onPictureInPictureModeChanged(activity, info.isInPictureInPictureMode)
@@ -93,7 +95,11 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
   override fun onDropViewInstance(view: SpallaPlayerContainerView) {
     Log.v("RNSpallaPlayerManager", "onDropViewInstance")
-    //_reactContext?.removeLifecycleEventListener(this)
+
+    if (_reactContext?.currentActivity is AppCompatActivity) {
+      val activity = _reactContext?.currentActivity as? AppCompatActivity
+      activity?.removeOnPictureInPictureModeChangedListener(pipModeListener)
+    }
 
     // Unregister this manager
     SpallaPlayerPipModule.unregisterPlayerManager(this)
@@ -306,6 +312,19 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
   fun triggerPipImmediate() {
     if (pipTriggered) return
+
+    // dispatch early, as waiting for the callback on piplistener may be too late
+    val map: WritableMap = Arguments.createMap()
+    map.putString("event", "enterPiP")
+    map.putBoolean("isInPictureInPictureMode", true)
+
+    _container?.let { container ->
+      _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
+        container.id,
+        "onPlayerEvent",
+        map
+      )
+    }
 
     _playerView?.let { player ->
       val activity = _reactContext?.currentActivity
