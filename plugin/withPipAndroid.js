@@ -47,9 +47,7 @@ import com.spallaplayer.SpallaPlayerPipModule`
     const method = `
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    reactNativeHost.reactInstanceManager.currentReactContext?.let { context ->
-      context.getNativeModule(SpallaPlayerPipModule::class.java)?.onUserLeaveHint()
-    }
+    SpallaPlayerPipModule.triggerUserLeaveHint()
   }
 `;
 

@@ -26,9 +26,6 @@ class MainActivity : ReactActivity() {
 
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
-    Log.v("MainActivity", "onUserLeaveHint")
-    reactNativeHost.reactInstanceManager.currentReactContext?.let { context ->
-      context.getNativeModule(SpallaPlayerPipModule::class.java)?.onUserLeaveHint()
-    }
+    SpallaPlayerPipModule.triggerUserLeaveHint()
   }
 }
