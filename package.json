@@ -15,7 +15,8 @@
         "types": "./lib/typescript/commonjs/src/index.d.ts",
         "default": "./lib/commonjs/index.js"
       }
-    }
+    },
+    "./app.plugin.js": "./app.plugin.js"
   },
   "files": [
     "src",
@@ -23,6 +24,8 @@
     "android",
     "ios",
     "cpp",
+    "plugin",
+    "app.plugin.js",
     "*.podspec",
     "!ios/build",
     "!android/build",
@@ -79,6 +82,7 @@
     "react": "18.3.1",
     "react-native": "0.75.4",
     "react-native-builder-bob": "^0.30.2",
+    "react-native-safe-area-context": "^5.4.1",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
@@ -88,7 +92,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-safe-area-context": "*"
   },
   "workspaces": [
     "example"
@@ -183,5 +188,11 @@
     "type": "view-legacy",
     "languages": "kotlin-swift",
     "version": "0.41.2"
+  },
+  "expo": {
+    "plugin": "./app.plugin.js"
+  },
+  "dependencies": {
+    "@expo/config-plugins": "^54.0.4"
   }
 }
