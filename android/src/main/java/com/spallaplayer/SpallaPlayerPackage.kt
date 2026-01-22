@@ -9,7 +9,10 @@ import com.spallaplayer.components.RNGoogleCastButtonManager
 
 class SpallaPlayerPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return listOf(SpallaPlayerModule(reactContext))
+    return listOf(
+      SpallaPlayerModule(reactContext),
+      SpallaPlayerPipModule(reactContext)
+    )
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
