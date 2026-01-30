@@ -1,12 +1,9 @@
 package spallaplayer.example
 
-import android.util.Log
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-import com.facebook.react.uimanager.UIManagerModule
-import com.spallaplayer.RNSpallaPlayerManager
 import com.spallaplayer.SpallaPlayerPipModule
 
 class MainActivity : ReactActivity() {

@@ -256,6 +256,22 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
         requestLayout()
       }
 
+      is AdBegin -> {
+        map.putString("event", "adBegin")
+      }
+      is AdBreakBegin -> {
+        map.putString("event", "adBreakBegin")
+      }
+      is AdBreakEnd -> {
+        map.putString("event", "adBreakEnd")
+      }
+      is AdEnd -> {
+        map.putString("event", "adEnd")
+      }
+      is AdError -> {
+        map.putString("event", "adError")
+      }
+      is PictureInPictureModeChanged -> TODO()
     }
     _container?.let { container ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(

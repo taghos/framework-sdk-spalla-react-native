@@ -66,7 +66,9 @@ interface PlayerEvent {
     | 'onEnterFullScreen'
     | 'onExitFullScreen'
     | 'enterPiP'
-    | 'exitPiP';
+    | 'exitPiP'
+    | 'adBreakBegin'
+    | 'adBreakEnd';
 }
 
 interface Props {

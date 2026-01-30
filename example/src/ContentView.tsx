@@ -1,13 +1,10 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import SpallaPlayer, { SpallaCastButton } from 'react-native-spalla-player';
-import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ContentView() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
-  const navigation = useNavigation();
-
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
   const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
@@ -15,19 +12,10 @@ export default function ContentView() {
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
   const [_, setTime] = React.useState(0);
-  //needs to hide interface when in PiP mode
-  const [isInPiP, setIsInPiP] = React.useState(false);
-
-  // Hide/show navigation header based on PiP state
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerShown: !isInPiP,
-    });
-  }, [isInPiP, navigation]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <View style={isInPiP ? styles.hidden : styles.header}>
+      <View style={styles.header}>
         <SpallaCastButton tintColor="white" />
       </View>
       <View style={styles.videoPlayer}>
@@ -44,7 +32,7 @@ export default function ContentView() {
             console.log('Native event received', nativeEvent.event);
             switch (nativeEvent.event) {
               case 'timeUpdate':
-                console.log('timeupdate', nativeEvent.time);
+                //console.log('timeupdate', nativeEvent.time);
                 setTime(nativeEvent.time);
                 break;
               case 'durationUpdate':
@@ -88,10 +76,16 @@ export default function ContentView() {
                 console.log('onExitFullScreen');
                 break;
               case 'enterPiP':
-                setIsInPiP(true);
+                console.log('enterPiP');
                 break;
               case 'exitPiP':
-                setIsInPiP(false);
+                console.log('exitPiP');
+                break;
+              case 'adBreakBegin':
+                console.log('adBreakBegin');
+                break;
+              case 'adBreakEnd':
+                console.log('adBreakEnd');
                 break;
 
               default:
@@ -101,7 +95,7 @@ export default function ContentView() {
         />
         {/* <TestUI playing={playing} playerRef={playerRef} time={time} /> */}
       </View>
-      <View style={isInPiP ? styles.hidden : styles.hstack}>
+      <View style={styles.hstack}>
         <Button
           onPress={() => {
             if (playing) {
@@ -117,7 +111,7 @@ export default function ContentView() {
           title={muted ? 'Unmute' : 'Mute'}
         />
       </View>
-      <View style={isInPiP ? styles.hidden : styles.hstack}>
+      <View style={styles.hstack}>
         <Button
           onPress={() => {
             setSubtitle(subtitle ? null : 'pt-br');
@@ -131,7 +125,7 @@ export default function ContentView() {
           title={playbackRate.toString() + 'x'}
         />
       </View>
-      <View style={isInPiP ? styles.hidden : styles.bottom} />
+      <View style={styles.bottom} />
     </SafeAreaView>
   );
 }
