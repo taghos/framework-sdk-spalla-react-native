@@ -109,8 +109,9 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "androidx.mediarouter:mediarouter:1.2.0"
-  implementation "stream.spalla:spalla-android-sdk:1.11.1"
+  implementation "stream.spalla:spalla-android-sdk:1.11.2"
   implementation "com.google.android.gms:play-services-cast-framework:21.3.0"
+  implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.36.0'
 }
 
 
