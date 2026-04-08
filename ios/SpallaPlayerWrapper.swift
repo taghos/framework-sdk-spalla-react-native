@@ -131,6 +131,7 @@ import SpallaSDK
   @objc public func unmount() {
     viewController.pause()
     viewController.removeFromParent()
+    viewController.unmount()
   }
   
   deinit {
