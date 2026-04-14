@@ -17,6 +17,7 @@ import SpallaSDK
     didSet {
       print("Content id: \(contentId ?? "nil")")
       // hacky! this needs to be delayed a bit so hideUI and startTime can be set first when comming from RN
+      // ideally we should use a single config object instead of separate props for contentId, hideUI, startTime, etc
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [self] in
         self.setupPlayer()
       }
@@ -56,6 +57,12 @@ import SpallaSDK
     }
   }
   
+  @objc var customImaParams: [String: String]? = nil {
+    didSet {
+      print("Custom IMA props set \(customImaParams ?? [:])")
+    }
+  }
+  
   @objc var onPlayerEvent: RCTBubblingEventBlock?
   
   convenience public init() {
@@ -90,7 +97,7 @@ import SpallaSDK
   
   func setupPlayer() {
     if let contentId {
-      viewController.setup(with: contentId, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle)
+      viewController.setup(with: contentId, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle, customImaParams: customImaParams ?? [:])
     }
   }
   
@@ -178,6 +185,10 @@ extension SpallaPlayerWrapper: SpallaPlayerListener {
       onPlayerEvent(["event": "enterFullscreen"])
     case .exitFullScreen:
       onPlayerEvent(["event": "exitFullscreen"])
+    case .adBreakBegin:
+      onPlayerEvent(["event": "adBreakBegin"])
+    case .adBreakEnd:
+      onPlayerEvent(["event": "adBreakEnd"])
     @unknown default:
       break
     }

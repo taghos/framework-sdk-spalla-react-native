@@ -7,6 +7,7 @@ import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ThemedReactContext
@@ -34,6 +35,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   private var hideUI: Boolean? = null
   private var isPlaying: Boolean = false
   private var pipTriggered: Boolean = false
+  private var customImaParams: Map<String, String>? = null
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -174,10 +176,15 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     this.hideUI = hideUI
   }
 
+  @ReactProp(name = "customImaParams")
+  fun setCustomImaParams(view: SpallaPlayerContainerView, customImaParams: ReadableMap?) {
+    this.customImaParams = customImaParams?.toHashMap()?.mapValues { it.value.toString() }
+  }
+
   private fun checkAndLoadPlayer(view: SpallaPlayerContainerView) {
     if (contentId != null && startTime != null && hideUI != null) {
       view.post {
-        view.spallaPlayerView.load(contentId!!, true, startTime!!, subtitle, hideUI!!)
+        view.spallaPlayerView.load(contentId!!, true, startTime!!, subtitle, hideUI!!, customImaParams)
       }
     }
   }

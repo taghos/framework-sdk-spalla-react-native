@@ -81,6 +81,7 @@ interface Props {
   startTime?: number;
   subtitle?: String | null;
   playbackRate?: 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
+  customImaParams?: Record<string, string>;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate

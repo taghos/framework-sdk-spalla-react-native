@@ -124,6 +124,7 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 | **`onPlayerEvent`**| callback | Function that will be called with player events
 | **`subtitle`**     | string  | subtitle to enable. Null will hide subtitles
 | **`playbackRate`**     | number  | Playback speed. Allowed values are 0.5, 1.0, 1.5 and 2.0
+| **`customImaParams`**     | Map  | Custom parameters for IMA ads. Key and value must be strings
 
 ## Imperative Methods
 
