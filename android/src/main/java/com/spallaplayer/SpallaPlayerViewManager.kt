@@ -7,17 +7,36 @@ import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.util.Consumer
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
-import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent
-import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.*
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.AdBegin
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.AdBreakBegin
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.AdBreakEnd
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.AdEnd
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.AdError
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.DurationUpdate
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Ended
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Error
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.MetadataLoaded
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Pause
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.PictureInPictureModeChanged
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Play
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.PlaybackRateSelected
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Playing
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.SubtitleSelected
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.SubtitlesAvailable
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.TimeUpdate
+import com.spalla.sdk.android.core.player.entities.SpallaPlayerEvent.Waiting
 import com.spalla.sdk.android.core.player.listeners.SpallaPlayerFullScreenListener
 import com.spalla.sdk.android.core.player.listeners.SpallaPlayerListener
 import com.spalla.sdk.android.core.player.view.SpallaPlayerView
+import com.spalla.sdk.android.domain.entities.AdsModel
 import java.util.Timer
 import java.util.TimerTask
 
@@ -36,6 +55,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   private var isPlaying: Boolean = false
   private var pipTriggered: Boolean = false
   private var customImaParams: Map<String, String>? = null
+  private var customAds: List<AdsModel>? = null
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -64,8 +84,6 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
   override fun createViewInstance(context: ThemedReactContext): SpallaPlayerContainerView {
     _reactContext = context
-    //context.addLifecycleEventListener(this)
-
     // Register this manager for direct PiP access
     SpallaPlayerPipModule.registerPlayerManager(this)
 
@@ -181,10 +199,33 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     this.customImaParams = customImaParams?.toHashMap()?.mapValues { it.value.toString() }
   }
 
+  @ReactProp(name = "customAds")
+  fun setCustomAds(view: SpallaPlayerContainerView, customAds: ReadableArray?) {
+    val ads = mutableListOf<AdsModel>()
+    customAds?.let {
+      for (i in 0 until it.size()) {
+        val adMap = it.getMap(i)
+        val url = adMap?.getString("url")
+        val offset = if (adMap?.hasKey("offset") == true) adMap.getString("offset") else null
+        if (url != null) {
+          ads.add(AdsModel(url = url, offset = offset))
+        }
+      }
+    }
+    this.customAds = ads.ifEmpty { null }
+  }
+
   private fun checkAndLoadPlayer(view: SpallaPlayerContainerView) {
     if (contentId != null && startTime != null && hideUI != null) {
       view.post {
-        view.spallaPlayerView.load(contentId!!, true, startTime!!, subtitle, hideUI!!, customImaParams)
+        view.spallaPlayerView.load(
+          contentId!!,
+          true,
+          startTime!!,
+          subtitle,
+          hideUI!!,
+          customImaParams,
+          customAds)
       }
     }
   }
@@ -192,7 +233,6 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   override fun onEvent(event: SpallaPlayerEvent) {
     val map: WritableMap = Arguments.createMap()
 
-    //Log.v("RNSpallaPlayerManager", "onEvent: $event")
     when (event) {
       is DurationUpdate -> {
         map.putString("event", "durationUpdate")

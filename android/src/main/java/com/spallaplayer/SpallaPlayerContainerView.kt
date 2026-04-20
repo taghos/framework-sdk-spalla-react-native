@@ -2,10 +2,8 @@ package com.spallaplayer
 
 import android.content.Context
 import android.util.Log
-import android.widget.FrameLayout
 import com.spalla.sdk.android.core.player.view.SpallaPlayerView
 import android.view.ViewGroup;
-import androidx.core.view.isNotEmpty
 
 class SpallaPlayerContainerView(context: Context) : ViewGroup(context) {
     val spallaPlayerView: SpallaPlayerView = SpallaPlayerView(context)

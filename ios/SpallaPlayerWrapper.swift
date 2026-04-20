@@ -63,6 +63,22 @@ import SpallaSDK
     }
   }
   
+  @objc var customAds: NSArray? = nil {
+    didSet {
+      var ads: [SpallaSDK.AdsModel] = []
+      customAds?.forEach { element in
+        if let parsed = element as? [String: String] {
+          if let url = parsed["url"] {
+            ads.append(AdsModel(url: parsed["url"], offset: parsed["offset"]))
+          }
+        }
+      }
+      parsedAds = ads
+    }
+  }
+  
+  private var parsedAds: [AdsModel]? = nil
+  
   @objc var onPlayerEvent: RCTBubblingEventBlock?
   
   convenience public init() {
@@ -93,11 +109,11 @@ import SpallaSDK
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
+  } 
   
   func setupPlayer() {
     if let contentId {
-      viewController.setup(with: contentId, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle, customImaParams: customImaParams ?? [:])
+      viewController.setup(with: contentId, hideUI: hideUI, startTime: startTime.doubleValue, subtitle: subtitle, customImaParams: customImaParams ?? [:], customAds: parsedAds ?? [])
     }
   }
   

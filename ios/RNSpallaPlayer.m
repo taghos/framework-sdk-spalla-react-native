@@ -19,6 +19,8 @@ RCT_EXPORT_VIEW_PROPERTY(playbackRate, NSNumber)
 
 RCT_EXPORT_VIEW_PROPERTY(customImaParams, NSDictionary)
 
+RCT_EXPORT_VIEW_PROPERTY(customAds, NSArray)
+
 RCT_EXPORT_METHOD(play: (nonnull NSNumber *) reactTag {
   
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
