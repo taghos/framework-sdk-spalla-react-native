@@ -125,6 +125,7 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 | **`subtitle`**     | string  | subtitle to enable. Null will hide subtitles
 | **`playbackRate`**     | number  | Playback speed. Allowed values are 0.5, 1.0, 1.5 and 2.0
 | **`customImaParams`**     | Map  | Custom parameters for IMA ads. Key and value must be strings
+| **`customAds`**     | Array  | Custom VAST/VMAP ads. Must be an array of objects like {["url": "vast url", "offset": "start"]}
 
 ## Imperative Methods
 
