@@ -1981,7 +1981,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-spalla-player (0.19.0):
+  - react-native-spalla-player (0.19.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2008,7 +2008,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - SocketRocket
-    - SpallaSDK (~> 2.6.2)
+    - SpallaSDK (~> 2.6.3)
     - Yoga
   - React-NativeModulesApple (0.83.0):
     - boost
@@ -2627,7 +2627,7 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
-  - SpallaSDK (2.6.2):
+  - SpallaSDK (2.6.3):
     - GoogleAds-IMA-iOS-SDK (~> 3.24.0)
     - Swifter (~> 1.5.0)
     - THEOplayer-Integration-GoogleCast (~> 10.8.0)
@@ -2955,7 +2955,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 20046c0447efaa7aace0b76085aa9bb35b0e8105
   React-microtasksnativemodule: 0e837de56519c92d8a2e3097717df9497feb33cb
   react-native-safe-area-context: c00143b4823773bba23f2f19f85663ae89ceb460
-  react-native-spalla-player: cd177d8c5f9ec4c545a0e5b5cfa07b146fc4aa94
+  react-native-spalla-player: e5c16a0865aaa1d9f49642d4cf6ba14e55b36b16
   React-NativeModulesApple: 1a378198515f8e825c5931a7613e98da69320cee
   React-networking: bfd1695ada5a57023006ce05823ac5391c3ce072
   React-oscompat: aedc0afbded67280de6bb6bfac8cfde0389e2b33
@@ -2991,7 +2991,7 @@ SPEC CHECKSUMS:
   ReactCommon: 424cc34cf5055d69a3dcf02f3436481afb8b0f6f
   RNScreens: 714e10b6b554f7dc7ad9f78dcf36dc8e3fc73415
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  SpallaSDK: 2addda6e918bce1230abea962011fcfd4919b530
+  SpallaSDK: d4d818e34442997713953eb36a0c2f42acc86f22
   Swifter: e71dd674404923d7f03ebb03f3f222d1c570bc8e
   THEOplayer-Integration-GoogleCast: 6a7ce4a8b790dee0fe5eb2cea7fecd3997bc3184
   THEOplayer-Integration-GoogleIMA: 8611472b83e6f8f78c2e9a0b722585795d5c21c3
