@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  requireNativeComponent,
-  type ViewStyle,
   NativeModules,
   findNodeHandle,
+  requireNativeComponent,
+  type ViewStyle,
 } from 'react-native';
 
 type allowedPlaybackRates = 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
@@ -17,6 +17,13 @@ interface RNSpallaPlayerProps {
   hideUI?: boolean;
   ref?: (ref: any) => void;
 }
+
+type CustomAd = {
+  url: string;
+  offset: string;
+};
+
+type CustomAds = CustomAd[];
 
 const RNSpallaPlayer =
   requireNativeComponent<RNSpallaPlayerProps>('RNSpallaPlayer');
@@ -82,6 +89,7 @@ interface Props {
   subtitle?: String | null;
   playbackRate?: 0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0;
   customImaParams?: Record<string, string>;
+  customAds?: CustomAds;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate
