@@ -1,5 +1,7 @@
 package com.spallaplayer
 
+import android.os.Handler
+import android.os.Looper
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -220,12 +222,13 @@ class SpallaPlayerModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun unmount(tag: Int) {
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
-      if (uiManager is UIManager) {
-        uiManager.resolveView(tag)?.let { view ->
-          if (view is SpallaPlayerContainerView) {
-            view.post {
-              view.spallaPlayerView.pause()
+      Handler(Looper.getMainLooper()).post {
+        val uiManager = UIManagerHelper.getUIManager(_reactContext, UIManagerType.FABRIC)
+        if (uiManager is UIManager) {
+          uiManager.resolveView(tag)?.let { view ->
+            if (view is SpallaPlayerContainerView) {
+              //view.spallaPlayerView.pause()
+              view.spallaPlayerView.onDestroy()
             }
           }
         }

@@ -124,14 +124,13 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     // Unregister this manager
     SpallaPlayerPipModule.unregisterPlayerManager(this)
 
-    view.post {
-      try {
-        loadTimer?.cancel()
-        view.spallaPlayerView.onDestroy()
-      } catch (e: Exception) {
-        e.printStackTrace()
-      }
+    try {
+      loadTimer?.cancel()
+      view.spallaPlayerView.onDestroy()
+    } catch (e: Exception) {
+      e.printStackTrace()
     }
+
     super.onDropViewInstance(view)
   }
 
