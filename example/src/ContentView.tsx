@@ -29,6 +29,7 @@ export default function ContentView() {
           subtitle={subtitle}
           playbackRate={playbackRate}
           customImaParams={{ type: '1' }}
+          pipEnabled={true}
           onPlayerEvent={({ nativeEvent }) => {
             console.log('Native event received', nativeEvent.event);
             switch (nativeEvent.event) {

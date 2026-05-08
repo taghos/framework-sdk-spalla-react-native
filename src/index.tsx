@@ -90,6 +90,7 @@ interface Props {
   playbackRate?: allowedPlaybackRates;
   customImaParams?: Record<string, string>;
   customAds?: CustomAds;
+  pipEnabled?: boolean;
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate

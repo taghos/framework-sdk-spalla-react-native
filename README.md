@@ -51,6 +51,7 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
     muted={muted}
     hideUI={false}
     subtitle={subtitle}
+    pipEnabled={false}
     onPlayerEvent={({ nativeEvent }) => {
       switch (nativeEvent.event) {
         case 'timeUpdate':
@@ -126,6 +127,7 @@ const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
 | **`playbackRate`**     | number  | Playback speed. Allowed values are 0.5, 1.0, 1.5 and 2.0
 | **`customImaParams`**     | Map  | Custom parameters for IMA ads. Key and value must be strings
 | **`customAds`**     | Array  | Custom VAST/VMAP ads. Must be an array of objects like {["url": "vast url", "offset": "start"]}
+| **`pipEnabled`**        | boolean  | enable PiP support. Remember to add android:supportsPictureInPicture="true" on MainActivity on Manifest.xml on Android, and add backgroundMode PiP on iOS
 
 ## Imperative Methods
 

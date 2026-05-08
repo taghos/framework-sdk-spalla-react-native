@@ -214,6 +214,11 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     this.customAds = ads.ifEmpty { null }
   }
 
+  @ReactProp(name = "pipEnabled")
+  fun setPipEnabled(view: SpallaPlayerContainerView, pipEnabled: Boolean) {
+    _playerView?.setPipEnabled(pipEnabled)
+  }
+
   private fun checkAndLoadPlayer(view: SpallaPlayerContainerView) {
     if (contentId != null && startTime != null && hideUI != null) {
       view.post {
@@ -317,7 +322,10 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
       is AdError -> {
         map.putString("event", "adError")
       }
-      is PictureInPictureModeChanged -> TODO()
+      is PictureInPictureModeChanged -> {
+        map.putString("event", "pipModeChanged")
+        map.putString("isInPictureInPictureMode", event.isInPictureInPictureMode.toString())
+      }
     }
     _container?.let { container ->
       _reactContext?.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(

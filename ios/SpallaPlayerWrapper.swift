@@ -76,6 +76,12 @@ import SpallaSDK
       parsedAds = ads
     }
   }
+
+  @objc var pipEnabled: Bool = false {
+    didSet {
+      // no op on iOS since the native player handles pip mode automatically, but we need to set this prop so RN doesn't throw an error when pipEnabled is set from the JS side
+    }
+  }
   
   private var parsedAds: [AdsModel]? = nil
   
