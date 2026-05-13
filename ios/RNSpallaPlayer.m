@@ -23,6 +23,8 @@ RCT_EXPORT_VIEW_PROPERTY(customAds, NSArray)
 
 RCT_EXPORT_VIEW_PROPERTY(pipEnabled, BOOL)
 
+RCT_EXPORT_VIEW_PROPERTY(presentationMode, NSString)
+
 RCT_EXPORT_METHOD(play: (nonnull NSNumber *) reactTag {
   
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {

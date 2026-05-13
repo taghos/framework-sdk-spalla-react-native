@@ -7,7 +7,9 @@ export default function ContentView() {
   const playerRef = React.useRef<SpallaPlayer | null>(null);
   const [muted, setMuted] = React.useState(false);
   const [playing, setPlaying] = React.useState(true);
-  const [subtitle, setSubtitle] = React.useState<String | null>('pt-br');
+  const [presentationMode, setPresentationMode] = React.useState<
+    'inline' | 'pip'
+  >('inline');
   const [playbackRate, setPlaybackRate] = React.useState<
     0.25 | 0.5 | 1.0 | 1.25 | 1.5 | 2.0
   >(1.0);
@@ -26,9 +28,15 @@ export default function ContentView() {
           muted={muted}
           hideUI={false}
           startTime={100}
-          subtitle={subtitle}
+          presentationMode={presentationMode}
           playbackRate={playbackRate}
           customImaParams={{ type: '1' }}
+          /*customAds={[
+            {
+              url: 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&correlator=',
+              offset: 'start',
+            },
+          ]}*/
           pipEnabled={true}
           onPlayerEvent={({ nativeEvent }) => {
             console.log('Native event received', nativeEvent.event);
@@ -55,7 +63,7 @@ export default function ContentView() {
                 break;
               case 'subtitleSelected':
                 console.log('subtitleSelected', nativeEvent.subtitle);
-                setSubtitle(nativeEvent.subtitle);
+                //setSubtitle(nativeEvent.subtitle);
                 break;
               case 'subtitlesAvailable':
                 console.log('subtitlesAvailable', nativeEvent.subtitles);
@@ -79,9 +87,11 @@ export default function ContentView() {
                 break;
               case 'enterPiP':
                 console.log('enterPiP');
+                setPresentationMode('pip');
                 break;
               case 'exitPiP':
                 console.log('exitPiP');
+                setPresentationMode('inline');
                 break;
               case 'adBreakBegin':
                 console.log('adBreakBegin');
@@ -116,9 +126,11 @@ export default function ContentView() {
       <View style={styles.hstack}>
         <Button
           onPress={() => {
-            setSubtitle(subtitle ? null : 'pt-br');
+            setPresentationMode(
+              presentationMode === 'inline' ? 'pip' : 'inline'
+            );
           }}
-          title={subtitle ? 'Disable subtitles' : 'Enable subtitles'}
+          title={presentationMode === 'inline' ? 'Enter PiP' : 'Exit PiP'}
         />
         <Button
           onPress={() => {

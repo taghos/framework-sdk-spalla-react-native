@@ -91,6 +91,7 @@ interface Props {
   customImaParams?: Record<string, string>;
   customAds?: CustomAds;
   pipEnabled?: boolean;
+  presentationMode?: 'inline' | 'pip';
   onPlayerEvent?: (event: {
     nativeEvent:
       | PlayerEventTimeUpdate

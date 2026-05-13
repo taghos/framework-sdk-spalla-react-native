@@ -1,5 +1,6 @@
 package com.spallaplayer
 
+import android.app.Activity
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -217,6 +218,15 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   @ReactProp(name = "pipEnabled")
   fun setPipEnabled(view: SpallaPlayerContainerView, pipEnabled: Boolean) {
     _playerView?.setPipEnabled(pipEnabled)
+  }
+
+  @ReactProp(name = "presentationMode")
+  fun setPresentationMode(view: SpallaPlayerContainerView, presentationMode: String) {
+    if (presentationMode == "pip") {
+      _reactContext?.currentActivity?.let {
+        _playerView?.enterPictureInPictureMode(it)
+      }
+    }
   }
 
   private fun checkAndLoadPlayer(view: SpallaPlayerContainerView) {

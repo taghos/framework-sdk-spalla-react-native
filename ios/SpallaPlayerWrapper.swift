@@ -69,7 +69,7 @@ import SpallaSDK
       customAds?.forEach { element in
         if let parsed = element as? [String: String] {
           if let url = parsed["url"] {
-            ads.append(AdsModel(url: parsed["url"], offset: parsed["offset"]))
+            ads.append(AdsModel(url: url, offset: parsed["offset"]))
           }
         }
       }
@@ -80,6 +80,16 @@ import SpallaSDK
   @objc var pipEnabled: Bool = false {
     didSet {
       // no op on iOS since the native player handles pip mode automatically, but we need to set this prop so RN doesn't throw an error when pipEnabled is set from the JS side
+    }
+  }
+  
+  @objc var presentationMode: String? {
+    didSet {
+      if presentationMode == "pip" {
+        viewController.enterPiP()
+      } else {
+        viewController.exitPip()
+      }
     }
   }
   
@@ -211,6 +221,10 @@ extension SpallaPlayerWrapper: SpallaPlayerListener {
       onPlayerEvent(["event": "adBreakBegin"])
     case .adBreakEnd:
       onPlayerEvent(["event": "adBreakEnd"])
+    case .enterPiP:
+      onPlayerEvent(["event": "enterPiP"])
+    case .exitPiP:
+      onPlayerEvent(["event": "exitPiP"])
     @unknown default:
       break
     }
