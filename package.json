@@ -1,6 +1,6 @@
 {
   "name": "react-native-spalla-player",
-  "version": "0.19.7",
+  "version": "0.19.8",
   "description": "Spalla SDK for RN",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
