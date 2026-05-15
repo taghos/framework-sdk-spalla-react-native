@@ -31,6 +31,10 @@ class SpallaPlayerPipModule(reactContext: ReactApplicationContext) : ReactContex
       // Check if an instance exists before calling the method
       instance?.onUserLeaveHint()
     }
+
+    fun onStop() {
+      instance?.onStop()
+    }
   }
 
   override fun getName(): String = NAME
@@ -43,6 +47,10 @@ class SpallaPlayerPipModule(reactContext: ReactApplicationContext) : ReactContex
   @ReactMethod
   fun onUserLeaveHint() {
     activePlayerManager?.triggerPipImmediate()
+  }
+
+  fun onStop() {
+    activePlayerManager?.onStop()
   }
 
 }

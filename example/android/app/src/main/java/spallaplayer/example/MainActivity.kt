@@ -21,8 +21,14 @@ class MainActivity : ReactActivity() {
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
+  override fun onStop() {
+    super.onStop()
+    SpallaPlayerPipModule.onStop()
+  }
+
   override fun onUserLeaveHint() {
     super.onUserLeaveHint()
     SpallaPlayerPipModule.triggerUserLeaveHint()
   }
+
 }

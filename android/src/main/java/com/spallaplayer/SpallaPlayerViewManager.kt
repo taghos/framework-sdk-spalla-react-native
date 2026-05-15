@@ -57,6 +57,7 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
   private var pipTriggered: Boolean = false
   private var customImaParams: Map<String, String>? = null
   private var customAds: List<AdsModel>? = null
+  private var isPlayingAd: Boolean = false
 
   override fun getName() = "RNSpallaPlayer"
 
@@ -318,18 +319,23 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
       }
 
       is AdBegin -> {
+        isPlayingAd = true
         map.putString("event", "adBegin")
       }
       is AdBreakBegin -> {
+        isPlayingAd = true
         map.putString("event", "adBreakBegin")
       }
       is AdBreakEnd -> {
+        isPlayingAd = false
         map.putString("event", "adBreakEnd")
       }
       is AdEnd -> {
+        isPlayingAd = false
         map.putString("event", "adEnd")
       }
       is AdError -> {
+        isPlayingAd = false
         map.putString("event", "adError")
       }
       is PictureInPictureModeChanged -> {
@@ -390,8 +396,17 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
     }
   }
 
+  fun onStop() {
+    _playerView?.pause()
+  }
+
   fun triggerPipImmediate() {
     if (pipTriggered) return
+
+    if (!isPlaying || isPlayingAd) {
+      // skip pip logic when playing an ad
+      return
+    }
 
     // dispatch early, as waiting for the callback on piplistener may be too late
     val map: WritableMap = Arguments.createMap()
@@ -408,9 +423,8 @@ class RNSpallaPlayerManager() : ViewGroupManager<SpallaPlayerContainerView>(),
 
     _playerView?.let { player ->
       val activity = _reactContext?.currentActivity
-      if (activity != null && isPlaying) {
-        pipTriggered = true
-        player.enterPictureInPictureMode(activity = activity)
+      if (activity != null) {
+        pipTriggered = player.enterPictureInPictureMode(activity = activity)
       }
     }
   }

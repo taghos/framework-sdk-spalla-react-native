@@ -49,6 +49,10 @@ import com.spallaplayer.SpallaPlayerPipModule`
     super.onUserLeaveHint()
     SpallaPlayerPipModule.triggerUserLeaveHint()
   }
+  override fun onStop() {
+    super.onStop()
+    SpallaPlayerPipModule.onStop()
+  }
 `;
 
     contents = contents.replace(
